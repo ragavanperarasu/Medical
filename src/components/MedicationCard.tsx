@@ -16,19 +16,19 @@ const MedicationCard = ({ name, dose }) => {
     >
       <Stack direction="row" justifyContent="space-between">
         <Stack direction="row" spacing={1} alignItems="center">
-          <LocalPharmacyIcon color="success" />
+          <LocalPharmacyIcon color="success" sx={{fontSize:18}} />
           <Box>
-            <Typography fontWeight="bold">{name}</Typography>
-            <Typography variant="body2" color="text.secondary">
+            <Typography fontWeight="bold" sx={{fontFamily:'Philosopher', fontSize: 15}}>{name}</Typography>
+            <Typography variant="body2" color="text.secondary" sx={{fontFamily:'Philosopher', fontSize: 14}}>
               Current
             </Typography>
           </Box>
         </Stack>
 
-        <Chip label="normal" color="success" size="small" />
+        <Chip label="Normal" color="success" size="small" sx={{fontFamily:"Philosopher"}}/>
       </Stack>
 
-      <Typography fontWeight="bold" mt={1}>
+      <Typography mt={1} sx={{fontFamily:"Philosopher", fontSize: 16}}>
         {dose}
       </Typography>
     </Card>

@@ -19,7 +19,7 @@ import {
 
 import axios from "axios";
 
-const HeaderBar = () => {
+const HeaderBar = ({ setHeaderData }) => {
   const [recording, setRecording] = useState(false);
   const [transcription, setTranscription] = useState("");
 
@@ -58,7 +58,8 @@ const HeaderBar = () => {
           formData
         );
 
-        setTranscription(response.data.text);
+       // setTranscription(response.data.text);
+        setHeaderData(response.data.text); // ✅ send transcription to App
       } catch (err) {
         console.error("Transcription failed:", err);
       }
@@ -99,7 +100,8 @@ const stopRecording = () => {
         p: 3,
         borderRadius: 3,
         boxShadow: "none",
-        border: "1px solid #C0C0C0"
+        border: "1px solid #C0C0C0",
+        
       }}
     >
       <Stack direction="row" justifyContent="space-between" alignItems="center">
@@ -111,14 +113,14 @@ const stopRecording = () => {
             direction="row"
             spacing={1}
             alignItems="center"
-            sx={{ bgcolor: "#f0f6ff", px: 2, py: 1, borderRadius: 3 }}
+            sx={{ bgcolor: "#f0f6ff", px: 2, py: 1, borderRadius: 3, }}
           >
             <User size={24} color="#3b82f6" />
             <Box>
-              <Typography variant="body2" color="text.secondary">
+              <Typography variant="body2" color="text.secondary" sx={{ fontFamily: "Philosopher", fontWeight: 500, fontSize: 14}}>
                 Current Patient
               </Typography>
-              <Typography fontWeight="bold">
+              <Typography fontWeight="bold" sx={{ fontFamily: "Comfortaa", fontSize: 16}}>
                 Sarah Mitchell
               </Typography>
             </Box>
@@ -173,7 +175,7 @@ const stopRecording = () => {
                   color="#ef4444"
                   style={{ animation: "pulse 1.2s infinite" }}
                 />
-                <Typography color="error" fontWeight={600}>
+                <Typography color="error" fontWeight={600} fontFamily={"Comfortaa"}>
                   Recording in Progress
                 </Typography>
               </Stack>
@@ -190,7 +192,7 @@ const stopRecording = () => {
                   color="#0070BB"
                   style={{ animation: "spin 1.2s linear infinite" }}
                 />
-                <Typography color="#0070BB">
+                <Typography color="#0070BB" sx={{fontFamily:"Comfortaa", fontWeight: 500}}>
                   Listening...
                 </Typography>
               </Stack>
@@ -209,6 +211,7 @@ const stopRecording = () => {
                 ? "0 0 0 4px rgba(239,68,68,0.2)"
                 : "0 0 0 0 rgba(0,0,0,0)",
               fontSize: 16,
+              fontFamily: "Comfortaa",
               transition: "all 0.3s ease",
               transform: recording ? "scale(1.05)" : "scale(1)",
 
@@ -230,10 +233,10 @@ const stopRecording = () => {
       {/* Transcription Output */}
       {transcription && (
         <Box mt={3}>
-          <Typography variant="subtitle2" color="text.secondary">
+          <Typography variant="subtitle2" color="text.secondary" sx={{fontFamily:'Comfortaa'}}>
             Transcription:
           </Typography>
-          <Typography fontWeight={500} sx={{ whiteSpace: "pre-line" }}>
+          <Typography fontWeight={500} sx={{ whiteSpace: "pre-line", fontFamily: "Comfortaa" }}>
             {transcription}
           </Typography>
         </Box>
@@ -264,13 +267,13 @@ const VitalItem = ({ icon, label, value }) => (
       <Typography
         variant="caption"
         color="text.secondary"
-        sx={{ fontWeight: 500, fontSize: 12 }}
+        sx={{ fontWeight: 500, fontSize: 14, fontFamily: "Philosopher" }}
       >
         {label}
       </Typography>
       <Typography
         variant="body1"
-        sx={{ fontWeight: 600, fontSize: 14 }}
+        sx={{ fontWeight: 600, fontSize: 16, fontFamily: "Comfortaa" }}
       >
         {value}
       </Typography>
