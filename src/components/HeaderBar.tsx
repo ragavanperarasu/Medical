@@ -6,11 +6,22 @@ import {
   Button,
   Stack
 } from "@mui/material";
-import { User, Heart, Activity, Mic, Thermometer, Square, Radio, Circle } from "react-feather";
+import {
+  User,
+  Heart,
+  Activity,
+  Mic,
+  Thermometer,
+  Square,
+  Radio,
+  Circle
+} from "react-feather";
+
+import axios from "axios";
 
 const HeaderBar = () => {
   const [recording, setRecording] = useState(false);
-  const [audioURL, setAudioURL] = useState(null);
+  const [transcription, setTranscription] = useState("");
 
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
@@ -18,50 +29,65 @@ const HeaderBar = () => {
 
   // 🎤 START RECORDING
   const startRecording = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        audio: true
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      audio: true
+    });
+
+    streamRef.current = stream; // ✅ store stream
+
+    const mediaRecorder = new MediaRecorder(stream);
+    mediaRecorderRef.current = mediaRecorder;
+    audioChunksRef.current = [];
+
+    mediaRecorder.ondataavailable = (event) => {
+      audioChunksRef.current.push(event.data);
+    };
+
+    mediaRecorder.onstop = async () => {
+      const audioBlob = new Blob(audioChunksRef.current, {
+        type: "audio/webm"
       });
 
-      streamRef.current = stream;
+      const formData = new FormData();
+      formData.append("audio", audioBlob, "audio.webm");
 
-      mediaRecorderRef.current = new MediaRecorder(stream);
-      audioChunksRef.current = [];
+      try {
+        const response = await axios.post(
+          "http://localhost:5000/transcribe",
+          formData
+        );
 
-      mediaRecorderRef.current.ondataavailable = (event) => {
-        audioChunksRef.current.push(event.data);
-      };
+        setTranscription(response.data.text);
+      } catch (err) {
+        console.error("Transcription failed:", err);
+      }
+    };
 
-      mediaRecorderRef.current.onstop = () => {
-        const audioBlob = new Blob(audioChunksRef.current, {
-          type: "audio/webm"
-        });
+    mediaRecorder.start();
+    setRecording(true);
 
-        console.log("Recorded Audio Blob:", audioBlob);
+    console.log("Recording started 🎙");
+  } catch (err) {
+    console.error("Microphone access denied:", err);
+    alert("Please allow microphone access");
+  }
+};
 
-        const url = URL.createObjectURL(audioBlob);
-        setAudioURL(url);
-      };
+const stopRecording = () => {
+  if (mediaRecorderRef.current) {
+    mediaRecorderRef.current.stop();
+  }
 
-      mediaRecorderRef.current.start();
-      setRecording(true);
-    } catch (error) {
-      alert("Microphone permission denied!");
-    }
-  };
+  // ✅ STOP microphone completely
+  if (streamRef.current) {
+    streamRef.current.getTracks().forEach(track => track.stop());
+    streamRef.current = null;
+  }
 
-  // 🛑 STOP RECORDING
-  const stopRecording = () => {
-    if (mediaRecorderRef.current) {
-      mediaRecorderRef.current.stop();
-    }
-
-    if (streamRef.current) {
-      streamRef.current.getTracks().forEach((track) => track.stop());
-    }
-
-    setRecording(false);
-  };
+  setRecording(false);
+  console.log("Recording stopped ❌");
+};
 
   const toggleRecording = () => {
     recording ? stopRecording() : startRecording();
@@ -81,7 +107,6 @@ const HeaderBar = () => {
         {/* LEFT SECTION */}
         <Stack direction="row" spacing={3} alignItems="center">
 
-          {/* Patient */}
           <Stack
             direction="row"
             spacing={1}
@@ -99,7 +124,6 @@ const HeaderBar = () => {
             </Box>
           </Stack>
 
-          {/* Vitals */}
           <Stack
             direction="row"
             spacing={4}
@@ -117,13 +141,11 @@ const HeaderBar = () => {
               label="Heart Rate"
               value="72 bpm"
             />
-
             <VitalItem
               icon={<Activity size={20} color="#2563eb" />}
               label="BP"
               value="120/80"
             />
-
             <VitalItem
               icon={<Thermometer size={20} color="#f97316" />}
               label="Temp"
@@ -136,99 +158,105 @@ const HeaderBar = () => {
         <Stack direction="row" spacing={2} alignItems="center">
 
           {recording && (
-  <Stack direction="row" spacing={3} alignItems="center">
-    
-    {/* Recording Status */}
-    <Stack direction="row" spacing={1} alignItems="center" sx={{ bgcolor: "#fff0f0", px: 2, py: 1, borderRadius: 3 }}>
-      <Circle
-        size={12}
-        fill="#ef4444"
-        color="#ef4444"
-        style={{
-          animation: "pulse 1.2s infinite"
-        }}
-      />
-      <Typography color="error" fontWeight={600}>
-        Recording in Progress
-      </Typography>
-    </Stack>
+            <Stack direction="row" spacing={3} alignItems="center">
 
-    {/* Transcribing Status */}
-    <Stack direction="row" spacing={1} alignItems="center" sx={{ bgcolor: "#f0f6ff", px: 2, py: 1, borderRadius: 3 }}>
-      <Radio
-        size={18}
-        color="#0070BB"
-        style={{
-          animation: "spin 1.2s linear infinite"
-        }}
-      />
-      <Typography color="#0070BB">
-        Transcribing...
-      </Typography>
-    </Stack>
+              {/* Recording Indicator */}
+              <Stack
+                direction="row"
+                spacing={1}
+                alignItems="center"
+                sx={{ bgcolor: "#fff0f0", px: 2, py: 1, borderRadius: 3 }}
+              >
+                <Circle
+                  size={12}
+                  fill="#ef4444"
+                  color="#ef4444"
+                  style={{ animation: "pulse 1.2s infinite" }}
+                />
+                <Typography color="error" fontWeight={600}>
+                  Recording in Progress
+                </Typography>
+              </Stack>
 
-    {/* Animations */}
-    <style>
-      {`
-        @keyframes pulse {
-          0% { opacity: 1; }
-          50% { opacity: 0.4; }
-          100% { opacity: 1; }
-        }
-
-        @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        }
-      `}
-    </style>
-
-  </Stack>
-)}
+              {/* Sending Indicator */}
+              <Stack
+                direction="row"
+                spacing={1}
+                alignItems="center"
+                sx={{ bgcolor: "#f0f6ff", px: 2, py: 1, borderRadius: 3 }}
+              >
+                <Radio
+                  size={18}
+                  color="#0070BB"
+                  style={{ animation: "spin 1.2s linear infinite" }}
+                />
+                <Typography color="#0070BB">
+                  Listening...
+                </Typography>
+              </Stack>
+            </Stack>
+          )}
 
           <Button
-  onClick={toggleRecording}
-  variant="contained"
-  startIcon={
-    recording ? <Square size={18} /> : <Mic size={18} />
-  }
-  sx={{
-    borderRadius: 3,
-    textTransform: "none",
-    bgcolor: recording ? "#ef4444" : "#0070FF",
-    boxShadow: recording
-      ? "0 0 0 4px rgba(239,68,68,0.2)"
-      : "0 0 0 0 rgba(0,0,0,0)",
-    fontSize: 16,
-    transition: "all 0.3s ease",
-    transform: recording ? "scale(1.05)" : "scale(1)",
+            onClick={toggleRecording}
+            variant="contained"
+            startIcon={recording ? <Square size={18} /> : <Mic size={18} />}
+            sx={{
+              borderRadius: 3,
+              textTransform: "none",
+              bgcolor: recording ? "#ef4444" : "#0070FF",
+              boxShadow: recording
+                ? "0 0 0 4px rgba(239,68,68,0.2)"
+                : "0 0 0 0 rgba(0,0,0,0)",
+              fontSize: 16,
+              transition: "all 0.3s ease",
+              transform: recording ? "scale(1.05)" : "scale(1)",
 
-    "&:hover": {
-      bgcolor: recording ? "#dc2626" : "#005bd1",
-      transform: "scale(1.05)"
-    },
+              "&:hover": {
+                bgcolor: recording ? "#dc2626" : "#005bd1",
+                transform: "scale(1.05)"
+              },
 
-    "&:active": {
-      transform: "scale(0.8)"
-    }
-  }}
->
-  {recording ? "Stop Recording" : "Start Recording"}
-</Button>
+              "&:active": {
+                transform: "scale(0.9)"
+              }
+            }}
+          >
+            {recording ? "Stop Recording" : "Start Recording"}
+          </Button>
         </Stack>
       </Stack>
 
-      {/* Audio Playback */}
-      {/* {audioURL && (
-        <Box mt={2}>
-          <audio controls src={audioURL} />
+      {/* Transcription Output */}
+      {transcription && (
+        <Box mt={3}>
+          <Typography variant="subtitle2" color="text.secondary">
+            Transcription:
+          </Typography>
+          <Typography fontWeight={500} sx={{ whiteSpace: "pre-line" }}>
+            {transcription}
+          </Typography>
         </Box>
-      )} */}
+      )}
+
+      <style>
+        {`
+          @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.4; }
+            100% { opacity: 1; }
+          }
+
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        `}
+      </style>
     </Card>
   );
 };
 
-// Reusable Vital Component
 const VitalItem = ({ icon, label, value }) => (
   <Stack direction="row" spacing={1} alignItems="center">
     {icon}
