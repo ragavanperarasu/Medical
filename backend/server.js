@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const multer = require("multer");
 require("dotenv").config();
+const { runWorkflow } = require("./workflow.js");
 
 const OpenAI = require("openai");
 
@@ -93,6 +94,29 @@ console.log("Translation:", englishText);
 
   } catch (error) {
     console.error("Error:", error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post("/api/triage", async (req, res) => {
+  try {
+    const { message } = req.body;
+
+    if (!message) {
+      return res.status(400).json({ error: "No message provided" });
+    }
+
+    console.log("Processing Triage for:", message);
+
+    // Run the agent workflow
+    const result = await runWorkflow({ input_as_text: message });
+
+    res.json({
+      success: true,
+      data: result.output_parsed
+    });
+  } catch (error) {
+    console.error("Agent Error:", error);
     res.status(500).json({ error: error.message });
   }
 });
