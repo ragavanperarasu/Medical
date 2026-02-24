@@ -4,7 +4,7 @@ import {
   Typography,
   Accordion,
   AccordionSummary,
-  AccordionDetails
+  AccordionDetails, Box
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Users } from "react-feather";
@@ -91,24 +91,56 @@ const CurrentComplaint = ({ headerData, headerData2 }) => {
       >
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Typography fontWeight={600} sx={{fontFamily:"Philosopher"}}>
-            Not Asked Questions
+            Patient Summary
           </Typography>
         </AccordionSummary>
 
 <AccordionDetails>
-          <Typography
-            sx={{
-              whiteSpace: "pre-line",
-              fontFamily: "Philosopher",
-              fontSize: 16,
-              bgcolor: "#f8f9fa",
-              p: 2,
-              borderRadius: 2
-            }}
-          >
-            {headerData2.domain}
-          </Typography>
-        </AccordionDetails>
+  <Box
+    sx={{
+      fontFamily: "Philosopher",
+      fontSize: 16,
+      bgcolor: "#f8f9fa",
+      p: 3,
+      borderRadius: 2
+    }}
+  >
+    {/* Domain */}
+    <Typography fontWeight={700} mb={1}>
+      Department: {headerData2?.domain}
+    </Typography>
+
+    {/* Risk Level */}
+    <Typography fontWeight={600} mb={1}>
+      Risk Level: {headerData2?.risk_level}
+    </Typography>
+
+    {/* Clinical Impression */}
+    <Typography mb={2}>
+      <strong>Clinical Impression:</strong><br />
+      {headerData2?.clinical_impression}
+    </Typography>
+
+    {/* Follow Up Questions */}
+    <Typography fontWeight={600} mb={1}>
+      Follow-up Questions:
+    </Typography>
+
+    <Box component="ul" sx={{ pl: 3, mb: 2 }}>
+      {headerData2?.follow_up_questions?.map((q, index) => (
+        <li key={index}>
+          <Typography>{q}</Typography>
+        </li>
+      ))}
+    </Box>
+
+    {/* Recommendation */}
+    <Typography>
+      <strong>Recommendation:</strong><br />
+      {headerData2?.recommendation}
+    </Typography>
+  </Box>
+</AccordionDetails>
       </Accordion>
     </Card>
   );

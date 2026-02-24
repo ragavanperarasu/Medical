@@ -39,7 +39,7 @@ app.post("/transcribe", upload.single("audio"), async (req, res) => {
       model: "gpt-4o-mini-transcribe",
     });
 
-    console.log("Transcription:", transcription.text);
+    // console.log("Transcription:", transcription.text);
     // 🌍 Step 2: Translate Tamil text → English
     const translation = await openai.chat.completions.create({
       model: "gpt-4o-mini",
@@ -79,7 +79,7 @@ Return output exactly like the example format.
     });
 
     const englishText = translation.choices[0].message.content;
-console.log("Translation:", englishText);
+// console.log("Translation:", englishText);
     res.json({
       success: true,
       original: transcription.text,
