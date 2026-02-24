@@ -4,10 +4,20 @@ import multer from "multer";
 import "dotenv/config";
 import { OpenAI, toFile } from "openai";
 import { runWorkflow } from "./workflow.js"; // MUST use .js extension here
+import path from "path";
+import { fileURLToPath } from "url";
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const publicPath = path.join(__dirname, "./public");
+
+app.use(express.static(publicPath));
 
 const upload = multer({
   storage: multer.memoryStorage(),
