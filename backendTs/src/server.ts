@@ -4,12 +4,6 @@ import multer from "multer";
 import "dotenv/config";
 import { OpenAI, toFile } from "openai";
 import { runWorkflow } from "./workflow.js"; // MUST use .js extension here
-import path from "path";
-import { fileURLToPath } from "url";
-
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const app = express();
 app.use(cors());
@@ -24,14 +18,8 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-const distPath = path.join(__dirname, "../../dist");
-
-// Serve static files
-app.use(express.static(distPath));
-
-// Default route
 app.get("/", (req, res) => {
-   res.sendFile(path.join(distPath, "index.html"));
+   res.send("backend working successfully")
 });
 
 app.post("/transcribe", upload.single("audio"), async (req, res) => {
@@ -39,24 +27,24 @@ app.post("/transcribe", upload.single("audio"), async (req, res) => {
     if (!req.file) {
       return res.status(400).json({ error: "No audio file uploaded" });
     }
-
+//console.log("Received file:", req.file.originalname, "size:", req.file.size);
     // 🎙 Step 1: Transcribe audio (Tamil → Tamil text)
-    // const transcription = await openai.audio.transcriptions.create({
-    //   file: new File(
-    //     [req.file.buffer],
-    //     req.file.originalname,
-    //     { type: req.file.mimetype }
-    //   ),
-    //   model: "gpt-4o-mini-transcribe",
-    // });
     const transcription = await openai.audio.transcriptions.create({
-  file: await toFile(
-    req.file.buffer,
-    req.file.originalname,
-    { type: req.file.mimetype }
-  ),
-  model: "gpt-4o-mini-transcribe",
-});
+      file: new File(
+        [req.file.buffer],
+        req.file.originalname,
+        { type: req.file.mimetype }
+      ),
+      model: "gpt-4o-mini-transcribe",
+    });
+//     const transcription = await openai.audio.transcriptions.create({
+//   file: await toFile(
+//     req.file.buffer,
+//     req.file.originalname,
+//     { type: req.file.mimetype }
+//   ),
+//   model: "gpt-4o-mini-transcribe",
+// });
 
     // console.log("Transcription:", transcription.text);
     // 🌍 Step 2: Translate Tamil text → English
@@ -114,6 +102,7 @@ Return output exactly like the example format.
 app.post("/api/triage", async (req: Request, res: Response) => {
   try {
     const { message } = req.body;
+    //console.log("Received message for triage:", message);
     const result = await runWorkflow({ input_as_text: message });
     res.json({ success: true, data: result });
   } catch (error: any) {

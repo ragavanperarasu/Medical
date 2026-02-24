@@ -54,15 +54,16 @@ const HeaderBar = ({ setHeaderData, setHeaderData2 }) => {
 
       try {
         const response = await axios.post(
-          "http://72.60.103.126/medical/transcribe",
+          "http://localhost:5000/transcribe",
           formData
         );
+        console.log("Transcription response:", response.data);
 
        // setTranscription(response.data.text);
         setHeaderData(response.data.text); // ✅ send transcription to App
 
         const response1 = await axios.post(
-          "http://72.60.103.126/medical/api/triage",
+          "http://localhost:5000/api/triage",
           { message: response.data.text }
         );
         setHeaderData2(response1.data.data.output_parsed); // ✅ send triage result to App
