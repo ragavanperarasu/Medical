@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import { useState, useRef } from "react";
 import {
   Box,
   Card,
@@ -21,7 +21,7 @@ import axios from "axios";
 
 const HeaderBar = ({ setHeaderData, setHeaderData2 }) => {
   const [recording, setRecording] = useState(false);
-  const [transcription, setTranscription] = useState("");
+  //const [transcription, setTranscription] = useState("");
 
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
@@ -238,7 +238,7 @@ const stopRecording = () => {
       </Stack>
 
       {/* Transcription Output */}
-      {transcription && (
+      {/* {transcription && (
         <Box mt={3}>
           <Typography variant="subtitle2" color="text.secondary" sx={{fontFamily:'Comfortaa'}}>
             Transcription:
@@ -247,7 +247,7 @@ const stopRecording = () => {
             {transcription}
           </Typography>
         </Box>
-      )}
+      )} */}
 
       <style>
         {`

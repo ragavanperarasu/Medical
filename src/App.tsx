@@ -1,9 +1,10 @@
-import React, {useState} from "react";
-import { Box, Container, Grid } from "@mui/material";
+import {useState} from "react";
+import { Box, Container, Grid} from "@mui/material";
+
 import HeaderBar from "./components/HeaderBar";
 import PreviousHealthData from "./components/PreviousHealthData";
 import CurrentComplaint from "./components/CurrentComplaint";
-import DataProgress from "./components/DataProgress";
+// import DataProgress from "./components/DataProgress";
 
 function App() {
   const [headerData, setHeaderData] = useState("Start you conversation by clicking the start recording button.");
@@ -17,11 +18,11 @@ function App() {
 />
 
         <Grid container spacing={3} sx={{ mt: 2 }}>
-          <Grid item size={{ xs: 12, md: 3 }}>
+          <Grid size={{ xs: 12, md: 3 }}>
             <PreviousHealthData />
           </Grid>
 
-          <Grid item size={{ xs: 12, md: 9 }}>
+          <Grid size={{ xs: 12, md: 9 }}>
             <CurrentComplaint headerData={headerData} headerData2={headerData2} />
           </Grid>
         </Grid>

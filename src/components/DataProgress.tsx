@@ -1,5 +1,5 @@
-import React from "react";
-import { Card, Typography, LinearProgress, Stack } from "@mui/material";
+
+import { Card, Typography, Stack } from "@mui/material";
 import ProgressItem from "./ProgressItem";
 
 const DataProgress = () => {

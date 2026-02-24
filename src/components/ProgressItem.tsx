@@ -1,4 +1,4 @@
-import React from "react";
+
 import { Typography, LinearProgress, Box } from "@mui/material";
 
 const ProgressItem = ({ title, percent }) => {

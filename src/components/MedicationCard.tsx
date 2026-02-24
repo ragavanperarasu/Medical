@@ -1,4 +1,4 @@
-import React from "react";
+
 import { Card, Typography, Box, Chip, Stack } from "@mui/material";
 import LocalPharmacyIcon from "@mui/icons-material/LocalPharmacy";
 
