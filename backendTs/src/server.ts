@@ -2,10 +2,11 @@ import express, { Request, Response } from "express";
 import cors from "cors";
 import multer from "multer";
 import "dotenv/config";
-import { OpenAI } from "openai";
+import { OpenAI, toFile } from "openai";
 import { runWorkflow } from "./workflow.js"; // MUST use .js extension here
 import path from "path";
 import { fileURLToPath } from "url";
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -40,14 +41,22 @@ app.post("/transcribe", upload.single("audio"), async (req, res) => {
     }
 
     // 🎙 Step 1: Transcribe audio (Tamil → Tamil text)
+    // const transcription = await openai.audio.transcriptions.create({
+    //   file: new File(
+    //     [req.file.buffer],
+    //     req.file.originalname,
+    //     { type: req.file.mimetype }
+    //   ),
+    //   model: "gpt-4o-mini-transcribe",
+    // });
     const transcription = await openai.audio.transcriptions.create({
-      file: new File(
-        [req.file.buffer],
-        req.file.originalname,
-        { type: req.file.mimetype }
-      ),
-      model: "gpt-4o-mini-transcribe",
-    });
+  file: await toFile(
+    req.file.buffer,
+    req.file.originalname,
+    { type: req.file.mimetype }
+  ),
+  model: "gpt-4o-mini-transcribe",
+});
 
     // console.log("Transcription:", transcription.text);
     // 🌍 Step 2: Translate Tamil text → English
@@ -96,7 +105,7 @@ Return output exactly like the example format.
       text: englishText
     });
 
-  } catch (error) {
+  } catch (error:any) {
     console.error("Error:", error);
     res.status(500).json({ error: error.message });
   }
