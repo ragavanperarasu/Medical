@@ -23,7 +23,7 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-const distPath = path.join(__dirname, "dist");
+const distPath = path.join(__dirname, "../../dist");
 
 // Serve static files
 app.use(express.static(distPath));
