@@ -19,7 +19,7 @@ import {
 
 import axios from "axios";
 
-const HeaderBar = ({ setHeaderData }) => {
+const HeaderBar = ({ setHeaderData, setHeaderData2 }) => {
   const [recording, setRecording] = useState(false);
   const [transcription, setTranscription] = useState("");
 
@@ -62,9 +62,11 @@ const HeaderBar = ({ setHeaderData }) => {
         setHeaderData(response.data.text); // ✅ send transcription to App
 
         const response1 = await axios.post(
-          "http://localhost:5000/transcribe",
-          formData
+          "http://localhost:5000/api/triage",
+          { message: response.data.text }
         );
+        setHeaderData2(response1.data.data.output_parsed); // ✅ send triage result to App
+
       } catch (err) {
         console.error("Transcription failed:", err);
       }

@@ -7,10 +7,14 @@ import DataProgress from "./components/DataProgress";
 
 function App() {
   const [headerData, setHeaderData] = useState("Start you conversation by clicking the start recording button.");
+  const [headerData2, setHeaderData2] = useState("Start you conversation by clicking the start recording button.");
   return (
     <Box sx={{ background: "#f5f7fb", minHeight: "100vh", py: 2}}>
       <Container maxWidth="xl">
-        <HeaderBar setHeaderData={setHeaderData}/>
+        <HeaderBar
+  setHeaderData={setHeaderData}
+  setHeaderData2={setHeaderData2}
+/>
 
         <Grid container spacing={3} sx={{ mt: 2 }}>
           <Grid item size={{ xs: 12, md: 3 }}>
@@ -18,7 +22,7 @@ function App() {
           </Grid>
 
           <Grid item size={{ xs: 12, md: 9 }}>
-            <CurrentComplaint headerData={headerData}/>
+            <CurrentComplaint headerData={headerData} headerData2={headerData2} />
           </Grid>
         </Grid>
       </Container>

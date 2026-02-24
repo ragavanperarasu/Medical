@@ -9,7 +9,7 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Users } from "react-feather";
 
-const CurrentComplaint = ({ headerData }) => {
+const CurrentComplaint = ({ headerData, headerData2 }) => {
   return (
     <Card
       sx={{
@@ -95,9 +95,10 @@ const CurrentComplaint = ({ headerData }) => {
           </Typography>
         </AccordionSummary>
 
-        <AccordionDetails>
+<AccordionDetails>
           <Typography
             sx={{
+              whiteSpace: "pre-line",
               fontFamily: "Philosopher",
               fontSize: 16,
               bgcolor: "#f8f9fa",
@@ -105,7 +106,7 @@ const CurrentComplaint = ({ headerData }) => {
               borderRadius: 2
             }}
           >
-            Summary will appear here...
+            {headerData2.domain}
           </Typography>
         </AccordionDetails>
       </Accordion>
