@@ -2,9 +2,6 @@
 import { z } from "zod";
 import { Agent, RunContext, AgentInputItem, Runner, withTrace } from "@openai/agents";
 
-export const runWorkflow = async (workflow: WorkflowInput) => { 
-
-
 const ClassifierSchema = z.object({ domain: z.string() });
 const CardiologySchema = z.object({ domain: z.enum(["Cardiology"]), follow_up_questions: z.array(z.string()), clinical_impression: z.string(), risk_level: z.enum(["Low", "Moderate", "High"]), recommendation: z.string() });
 const NeurologySchema = z.object({ domain: z.enum(["Cardiology"]), follow_up_questions: z.array(z.string()), clinical_impression: z.string(), risk_level: z.enum(["Low", "Moderate", "High"]), recommendation: z.string() });
@@ -545,6 +542,4 @@ export const runWorkflow = async (workflow: WorkflowInput) => {
       return classifierResult;
     }
   });
-}
-
 }
