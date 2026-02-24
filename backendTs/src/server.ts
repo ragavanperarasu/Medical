@@ -4,6 +4,11 @@ import multer from "multer";
 import "dotenv/config";
 import { OpenAI } from "openai";
 import { runWorkflow } from "./workflow.js"; // MUST use .js extension here
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 app.use(cors());
@@ -18,9 +23,14 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
+const distPath = path.join(__dirname, "dist");
+
+// Serve static files
+app.use(express.static(distPath));
+
 // Default route
 app.get("/", (req, res) => {
-  res.send("Medical AI Backend Running 🚀");
+   res.sendFile(path.join(distPath, "index.html"));
 });
 
 app.post("/transcribe", upload.single("audio"), async (req, res) => {
