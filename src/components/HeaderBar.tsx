@@ -60,6 +60,11 @@ const HeaderBar = ({ setHeaderData }) => {
 
        // setTranscription(response.data.text);
         setHeaderData(response.data.text); // ✅ send transcription to App
+
+        const response1 = await axios.post(
+          "http://localhost:5000/transcribe",
+          formData
+        );
       } catch (err) {
         console.error("Transcription failed:", err);
       }
