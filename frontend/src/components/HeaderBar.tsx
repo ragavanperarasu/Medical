@@ -19,7 +19,7 @@ import {
 
 import axios from "axios";
 
-const HeaderBar = ({ setHeaderData, setHeaderData2 }) => {
+const HeaderBar = ({ setHeaderData, setHeaderData2, patientData }) => {
   const [recording, setRecording] = useState(false);
   //const [transcription, setTranscription] = useState("");
 
@@ -129,7 +129,7 @@ const stopRecording = () => {
                 Current Patient
               </Typography>
               <Typography fontWeight="bold" sx={{ fontFamily: "Comfortaa", fontSize: 16}}>
-                Sarah Mitchell
+                {patientData.name}
               </Typography>
             </Box>
           </Stack>
