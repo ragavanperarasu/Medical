@@ -73,6 +73,7 @@ const DataProgress = () => {
               key={section.id}
               elevation={0} 
               disableGutters 
+              defaultExpanded={true}
               sx={{ 
                 '&:before': { display: 'none' },
                 border: '1px solid #F0F2F5',

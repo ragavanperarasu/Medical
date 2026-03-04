@@ -105,7 +105,7 @@ const PreviousHealthData = () => {
       {Object.entries(healthData).map(([title, items], index) => (
         <Accordion
           key={title}
-          defaultExpanded={true}
+          defaultExpanded={index === 0} // Expand first section by default
           disableGutters
           sx={{
             mb: 2,
