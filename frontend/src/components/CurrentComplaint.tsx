@@ -60,7 +60,7 @@ const CurrentComplaint = () => {
         py: 3,
         px: 3,
         borderRadius: 4,
-        minHeight: "70vh",
+        minHeight: "50vh",
         border: "1px solid #C0C0C0",
         bgcolor: "#fff",
         boxShadow: "none",
@@ -71,7 +71,7 @@ const CurrentComplaint = () => {
       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3 }}>
         <Typography
           variant="h6"
-          sx={{ fontWeight: 700, fontFamily: "Comfortaa", display: "flex", alignItems: "center", gap: 1.5 }}
+          sx={{ fontWeight: 700, fontFamily: "Comfortaa", display: "flex", alignItems: "center", gap: 1.5 , fontSize: 18 }}
         >
           <MessageSquare size={22} color="#2563eb" />
           Required Follow-up Questions
@@ -98,7 +98,7 @@ const CurrentComplaint = () => {
       <Stack 
         spacing={2} 
         sx={{ 
-          maxHeight: "520px", 
+          maxHeight: "48vh", 
           overflowY: "auto",
           pr: 1,
           "&::-webkit-scrollbar": { width: "6px" },

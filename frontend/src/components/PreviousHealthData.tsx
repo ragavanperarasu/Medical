@@ -1,130 +1,205 @@
-
+import { useState } from "react";
 import {
   Card,
   Typography,
   Accordion,
   AccordionSummary,
   AccordionDetails,
+  IconButton,
+  Stack,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TextField,
+  Button, Box
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import MedicationCard from "./MedicationCard";
-import { Activity } from "react-feather";
-
-const healthSections = [
-  {
-    title: "Medical History",
-    bgColor: "#e9f8ff",
-    items: ["Diabetes", "Hypertension"],
-    type: "text",
-    defaultExpanded: true,
-  },
-  {
-    title: "Medications",
-    bgColor: "#F1F8FF",
-    items: [
-      { name: "Metformin", dose: "500mg Twice daily" },
-      { name: "Lisinopril", dose: "10mg Once daily" },
-    ],
-    type: "medication",
-    defaultExpanded: true,
-  },
-  {
-    title: "Allergies",
-    bgColor: "#FFF4F4",
-    items: ["Peanuts", "Dust"],
-    type: "text",
-  },
-];
+import { Activity, Plus, Edit3, Trash2 } from "react-feather";
 
 const PreviousHealthData = () => {
+  // 1. Manage health data in state
+  const [healthData, setHealthData] = useState({
+    "Medical History": ["Diabetes", "Hypertension"],
+    "Allergies": ["Peanuts", "Dust"],
+    "Lifestyle": ["Non-smoker", "Occasional Alcohol"],
+    "Medications": ["Metformin 500mg", "Lisinopril 10mg"],
+    "Surgical History": ["Appendectomy (2015)"]
+  });
+
+  // 2. State for Dialog
+  const [open, setOpen] = useState(false);
+  const [currentSection, setCurrentSection] = useState("");
+  const [editIndex, setEditIndex] = useState(null); // null means adding new
+  const [inputValue, setInputValue] = useState("");
+
+  // Handlers
+  const handleOpenDialog = (section, index = null) => {
+    setCurrentSection(section);
+    setEditIndex(index);
+    setInputValue(index !== null ? healthData[section][index] : "");
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setInputValue("");
+  };
+
+  const handleSave = () => {
+    const updatedSection = [...healthData[currentSection]];
+    if (editIndex !== null) {
+      updatedSection[editIndex] = inputValue;
+    } else {
+      updatedSection.push(inputValue);
+    }
+
+    setHealthData({ ...healthData, [currentSection]: updatedSection });
+    handleClose();
+  };
+
+  const handleDelete = (section, index) => {
+    const updatedSection = healthData[section].filter((_, i) => i !== index);
+    setHealthData({ ...healthData, [section]: updatedSection });
+  };
+
   return (
     <Card
       sx={{
-        p: 2,
+        px: 2,
+        pb: 2,
         borderRadius: 3,
         boxShadow: "none",
         border: "1px solid #C0C0C0",
         minHeight: "80vh",
+        maxHeight: "80vh",
         minWidth: 280,
+        overflowY: "auto",
+        pr: 1,
+        "&::-webkit-scrollbar": { width: "4px" },
+          "&::-webkit-scrollbar-track": { background: "#f1f1f1", borderRadius: "10px", mt:8, mb:4 },
+          "&::-webkit-scrollbar-thumb": { background: "#cbd5e1", borderRadius: "10px"},
       }}
     >
-
-<Typography
-  variant="h6"
-  fontWeight="bold"
-  mb={2}
-  sx={{
-    fontFamily: "Comfortaa",
-    display: "flex",
-    alignItems: "center",
-    gap: 1,
-    color: "#000000",
-  }}
->
-  <Activity size={22} color="#2563eb" />
-  Health Status
-</Typography>
-
-      {healthSections.map((section, index) => (
+      <Typography
+        variant="h6"
+        fontWeight="bold"
+        sx={{
+          fontFamily: "Comfortaa",
+          fontSize: 18,
+          display: "flex",
+          alignItems: "center",
+          gap: 1,
+          color: "#000000",
+          position: "sticky",
+          top: 0,
+          zIndex: 1,
+          bgcolor: "white",
+          py: 2
+        }}
+      >
+        <Activity size={22} color="#2563eb" />
+        Health Status
+      </Typography>
+      <Box sx={{}}>
+      {Object.entries(healthData).map(([title, items], index) => (
         <Accordion
-  key={index}
-  defaultExpanded={section.defaultExpanded || false}
-  disableGutters
-  sx={{
-    mb: 2,
-    borderRadius: 2,
-    boxShadow: "none",
-    bgcolor: "white",
-    border: "1px solid #E0E0E0",
+          key={title}
+          defaultExpanded={true}
+          disableGutters
+          sx={{
+            mb: 2,
+            borderRadius: 2,
+            boxShadow: "none",
+            bgcolor: "white",
+            border: "1px solid #E0E0E0",
+            "&:before": { display: "none" },
+            "&.MuiAccordion-root": { borderRadius: 2 },
+            "&.Mui-expanded": { borderRadius: 2 },
 
-    // remove default divider line
-    "&:before": { display: "none" },
-
-    // force full rounded corners
-    "&.MuiAccordion-root": {
-      borderRadius: 2
-    },
-
-    // when expanded also keep radius
-    "&.Mui-expanded": {
-      borderRadius: 2
-    }
-  }}
->
+          }}
+        >
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography sx={{fontFamily:"Philosopher"}}>
-              {section.title} ({section.items.length})
-            </Typography>
+            <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ width: "100%", pr: 1 }}>
+              <Typography sx={{ fontFamily: "Philosopher", fontWeight: 600 }}>
+                {title} ({items.length})
+              </Typography>
+              <IconButton 
+                size="small" 
+                onClick={(e) => {
+                  e.stopPropagation(); // prevent accordion from toggling
+                  handleOpenDialog(title);
+                }}
+                sx={{ bgcolor: "#f0f6ff", color: "#2563eb" }}
+              >
+                <Plus size={16} />
+              </IconButton>
+            </Stack>
           </AccordionSummary>
 
           <AccordionDetails>
-            {section.type === "text" &&
-              section.items.map((item, i) => (
-                <Typography
+            <Stack spacing={1}>
+              {items.map((item, i) => (
+                <Stack
                   key={i}
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="center"
                   sx={{
-                    bgcolor: "#F0F8FF",
+                    bgcolor: "#F8FAFC",
                     px: 2,
                     py: 1,
                     borderRadius: 2,
-                    mb: 1,
-                    fontSize: 16,
-                    fontWeight: 500,
-                    fontFamily: "Philosopher",
-                    //border: "1px solid #E0E0E0"
+                    border: "1px solid #f1f5f9"
                   }}
                 >
-                  {item}
-                </Typography>
+                  <Typography sx={{ fontSize: 15, fontFamily: "Philosopher" }}>
+                    {item}
+                  </Typography>
+                  <Stack direction="row" spacing={0.5}>
+                    <IconButton size="small" onClick={() => handleOpenDialog(title, i)}>
+                      <Edit3 size={14} color="#64748b" />
+                    </IconButton>
+                    <IconButton size="small" onClick={() => handleDelete(title, i)}>
+                      <Trash2 size={14} color="#ef4444" />
+                    </IconButton>
+                  </Stack>
+                </Stack>
               ))}
-
-            {section.type === "medication" &&
-              section.items.map((med, i) => (
-                <MedicationCard key={i} name={med.name} dose={med.dose} />
-              ))}
+            </Stack>
           </AccordionDetails>
         </Accordion>
       ))}
+
+      {/* Shared Edit/Add Dialog */}
+      <Dialog open={open} onClose={handleClose} fullWidth maxWidth="xs">
+        <DialogTitle sx={{ fontFamily: "Comfortaa" }}>
+          {editIndex !== null ? "Edit Item" : `Add to ${currentSection}`}
+        </DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            label="Details"
+            fullWidth
+            variant="outlined"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            sx={{ mt: 1 }}
+          />
+        </DialogContent>
+        <DialogActions sx={{ p: 2 }}>
+          <Button onClick={handleClose} color="inherit">Cancel</Button>
+          <Button 
+            onClick={handleSave} 
+            variant="contained" 
+            disabled={!inputValue.trim()}
+            sx={{ borderRadius: 2, textTransform: "none" }}
+          >
+            Save Information
+          </Button>
+        </DialogActions>
+      </Dialog></Box>
     </Card>
   );
 };

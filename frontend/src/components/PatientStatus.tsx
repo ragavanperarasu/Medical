@@ -26,18 +26,19 @@ const PatientStatus = ({ patientData }) => {
       <Paper 
         elevation={0} 
         sx={{ 
-          p: 3, 
+          px: 3, 
+          py:2,
           borderRadius: '16px', 
           border: '1px solid #C0C0C0', 
           bgcolor: 'white' 
         }}
       >
         {/* Header: Name and Status */}
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
             <Box>
             <Typography
                     fontWeight="bold"
-                    sx={{ fontFamily: "Comfortaa", fontSize: 22 , display: "flex", alignItems: "center", gap: 1 }}
+                    sx={{ fontFamily: "Comfortaa", fontSize: 18 , display: "flex", alignItems: "center", gap: 1 }}
                   >
                     <User size={22} color="#2563eb"/>
                     Current Complaint 
@@ -59,17 +60,17 @@ const PatientStatus = ({ patientData }) => {
           />
         </Box>
 
-        <Divider sx={{ mb: 3 }} />
+        <Divider sx={{ mb: 1 }} />
 
         {/* Status Details Grid */}
         <Grid container spacing={3} justifyContent={'space-between'}>
           {/* Appointment Date */}
           <Grid item xs={12} sm={6} md={3}>
-            <Stack spacing={1}>
+            <Stack spacing={0.5}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'text.secondary' }}>
                 <Calendar size={16} color="#2563eb"/>
-                <Typography variant="caption" sx={{ fontWeight: 800, fontFamily: 'Comfortaa' }}>
-                  DATE OF BIRTH
+                <Typography variant="caption" sx={{ fontWeight: 800, fontFamily: 'Comfortaa',  }}>
+                  Date of Birth
                 </Typography>
               </Box>
               <Typography variant="body1" sx={{ fontWeight: 500, fontFamily: 'Philosopher' }}>
@@ -78,28 +79,14 @@ const PatientStatus = ({ patientData }) => {
             </Stack>
           </Grid>
 
-          {/* Registration Number */}
-          {/* <Grid item xs={12} sm={6} md={3}>
-            <Stack spacing={1}>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'text.secondary' }}>
-                <Hash size={16} />
-                <Typography variant="caption" sx={{ fontWeight: 600, letterSpacing: '0.5px' }}>
-                  REG NO
-                </Typography>
-              </Box>
-              <Typography variant="body1" sx={{ fontWeight: 500, ml: 3 }}>
-                {patientData.regno}
-              </Typography>
-            </Stack>
-          </Grid> */}
 
           {/* Attending Doctor */}
           <Grid item xs={12} sm={6} md={3}>
-            <Stack spacing={1}>
+            <Stack spacing={0.5}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'text.secondary' }}>
                 <User size={16} color="#2563eb"/>
                 <Typography variant="caption" sx={{ fontWeight: 800, letterSpacing: '0.5px', fontFamily: 'Comfortaa' }}>
-                  ATTENDING DOCTOR
+                  Attending Doctor
                 </Typography>
               </Box>
               <Typography variant="body1" sx={{ fontWeight: 500, ml: 3 , fontFamily: 'Philosopher'}}>
@@ -110,11 +97,11 @@ const PatientStatus = ({ patientData }) => {
 
           {/* Chief Complaint */}
           <Grid item xs={12} sm={6} md={3}>
-            <Stack spacing={1}>
+            <Stack spacing={0.5}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'text.secondary' }}>
                 <Activity size={16} color="#2563eb"/>
                 <Typography variant="caption" sx={{ fontWeight: 800, letterSpacing: '0.5px', fontFamily: 'Comfortaa' }}>
-                  COMPLAINT
+                  Complaint
                 </Typography>
               </Box>
               <Typography variant="body1" sx={{ fontWeight: 500, ml: 3, color: '#D32F2F', fontFamily: 'Philosopher' }}>
