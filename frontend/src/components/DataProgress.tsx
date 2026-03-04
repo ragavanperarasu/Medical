@@ -55,7 +55,7 @@ const DataProgress = () => {
   };
 
   return (
-    <Card sx={{ p: 3, borderRadius: 4, border: '1px solid #C0C0C0', boxShadow: 'none', bgcolor: 'white' }}>
+    <Card sx={{ p: 3, borderRadius: 4, border: '1px solid #C0C0C0', boxShadow: 'none', bgcolor: 'white', minHeight: '80vh' }}>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 3 }}>
         <Clipboard size={20} color="#007FFF" />
         <Typography variant="h6" fontWeight="800" sx={{ color: '#1A2027', fontFamily: 'Comfortaa' }}>

@@ -16,6 +16,7 @@ const healthSections = [
     bgColor: "#e9f8ff",
     items: ["Diabetes", "Hypertension"],
     type: "text",
+    defaultExpanded: true,
   },
   {
     title: "Medications",
@@ -43,7 +44,7 @@ const PreviousHealthData = () => {
         borderRadius: 3,
         boxShadow: "none",
         border: "1px solid #C0C0C0",
-        minHeight: "70vh",
+        minHeight: "80vh",
         minWidth: 280,
       }}
     >

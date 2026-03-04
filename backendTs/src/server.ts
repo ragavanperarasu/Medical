@@ -37,7 +37,6 @@ app.post("/transcribe", upload.single("audio"), async (req, res) => {
     if (!req.file) {
       return res.status(400).json({ error: "No audio file uploaded" });
     }
-//console.log("Received file:", req.file.originalname, "size:", req.file.size);
     // 🎙 Step 1: Transcribe audio (Tamil → Tamil text)
     const transcription = await openai.audio.transcriptions.create({
       file: new File(
@@ -47,16 +46,6 @@ app.post("/transcribe", upload.single("audio"), async (req, res) => {
       ),
       model: "gpt-4o-mini-transcribe",
     });
-//     const transcription = await openai.audio.transcriptions.create({
-//   file: await toFile(
-//     req.file.buffer,
-//     req.file.originalname,
-//     { type: req.file.mimetype }
-//   ),
-//   model: "gpt-4o-mini-transcribe",
-// });
-
-    // console.log("Transcription:", transcription.text);
     // 🌍 Step 2: Translate Tamil text → English
     const translation = await openai.chat.completions.create({
       model: "gpt-4o-mini",

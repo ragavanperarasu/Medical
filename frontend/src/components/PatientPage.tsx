@@ -29,13 +29,14 @@ setPatientData(data);
   setHeaderData={setHeaderData}
   setHeaderData2={setHeaderData2}
 />
-        <Grid container spacing={3} sx={{ mt: 2 }}>
+        <Grid container spacing={2} sx={{ mt: 2 }}>
           <Grid size={{ xs: 12, md: 3 }}>
             <PreviousHealthData />
           </Grid>
 
           <Grid size={{ xs: 12, md: 6 }}>
             <PatientStatus patientData={patientData} />
+            <CurrentComplaint />
           </Grid>
             <Grid size={{ xs: 12, md: 3 }}>
                 <DataProgress />
