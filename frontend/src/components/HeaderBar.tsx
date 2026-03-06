@@ -79,6 +79,7 @@ const HeaderBar = ({ setHeaderData, setHeaderData2, patientData }) => {
           setHeaderData(response.data.text);
           const response1 = await axios.post("http://127.0.0.1:5000/api/ortho", { message: response.data.text });
           console.log("Ortho Agent Response:", response1.data);
+          console.log("type of :", typeof(response1.data))
           setHeaderData2(response1.data.data.output_parsed);
         } catch (err) {
           console.error("Transcription failed:", err);

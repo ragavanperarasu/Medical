@@ -118,8 +118,9 @@ app.post("/api/ortho", async (req: Request, res: Response) => {
     const { message } = req.body;
     console.log("Received message for ortho:", message);
     const result = await runWorkflowOrtho({ input_as_text: message });
-    console.log("Ortho Agent Result:", result);
-    res.send(result);
+   // console.log("Ortho Agent Result:", result);
+    res.json(result.output_text);
+
   } catch (error: any) {
     res.status(500).json({ success: false, error: error.message });
   }
