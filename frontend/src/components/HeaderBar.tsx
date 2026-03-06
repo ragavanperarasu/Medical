@@ -74,9 +74,11 @@ const HeaderBar = ({ setHeaderData, setHeaderData2, patientData }) => {
         formData.append("audio", audioBlob, "audio.webm");
 
         try {
-          const response = await axios.post("http://72.60.103.126/medical/transcribe", formData);
+
+          const response = await axios.post("http://127.0.0.1:5000/transcribe", formData);
           setHeaderData(response.data.text);
-          const response1 = await axios.post("http://72.60.103.126/medical/api/triage", { message: response.data.text });
+          const response1 = await axios.post("http://127.0.0.1:5000/api/ortho", { message: response.data.text });
+          console.log("Ortho Agent Response:", response1.data);
           setHeaderData2(response1.data.data.output_parsed);
         } catch (err) {
           console.error("Transcription failed:", err);

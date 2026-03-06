@@ -4,6 +4,7 @@ import multer from "multer";
 import "dotenv/config";
 import { OpenAI, toFile } from "openai";
 import { runWorkflow } from "./workflow.js"; // MUST use .js extension here
+import { runWorkflowOrtho } from "./orthoAgent.js"; // MUST use .js extension here
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -32,6 +33,7 @@ app.get("/", (req, res) => {
    res.send("backend working successfully")
 });
 
+
 app.post("/transcribe", upload.single("audio"), async (req, res) => {
   try {
     if (!req.file) {
@@ -44,8 +46,10 @@ app.post("/transcribe", upload.single("audio"), async (req, res) => {
         req.file.originalname,
         { type: req.file.mimetype }
       ),
-      model: "gpt-4o-mini-transcribe",
+      model: "gpt-4o-transcribe",
     });
+
+    console.log("Transcription:", transcription.text);
     // 🌍 Step 2: Translate Tamil text → English
     const translation = await openai.chat.completions.create({
       model: "gpt-4o-mini",
@@ -85,7 +89,7 @@ Return output exactly like the example format.
     });
 
     const englishText = translation.choices[0].message.content;
-// console.log("Translation:", englishText);
+console.log("Translation:", englishText);
     res.json({
       success: true,
       original: transcription.text,
@@ -103,7 +107,19 @@ app.post("/api/triage", async (req: Request, res: Response) => {
     const { message } = req.body;
     //console.log("Received message for triage:", message);
     const result = await runWorkflow({ input_as_text: message });
-    res.json({ success: true, data: result });
+    res.json(result);
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.post("/api/ortho", async (req: Request, res: Response) => {
+  try {
+    const { message } = req.body;
+    console.log("Received message for ortho:", message);
+    const result = await runWorkflowOrtho({ input_as_text: message });
+    console.log("Ortho Agent Result:", result);
+    res.send(result);
   } catch (error: any) {
     res.status(500).json({ success: false, error: error.message });
   }
