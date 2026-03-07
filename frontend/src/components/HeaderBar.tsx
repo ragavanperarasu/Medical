@@ -34,6 +34,8 @@ import Loading from "./Loading";
 import axios from "axios";
 import Lottie from "lottie-react";
 import loadingAnimation from "../assets/animation/loading.json";
+import { ToastContainer, toast } from 'react-toastify';
+
 
 const HeaderBar = ({
   setHeaderData,
@@ -49,6 +51,7 @@ const HeaderBar = ({
   const audioContextRef = useRef(null);
 const analyserRef = useRef(null);
 const silenceTimerRef = useRef(null);
+  
 
   const [open, setOpen] = useState(false);
   const [vitals, setVitals] = useState({
@@ -169,7 +172,8 @@ const silenceTimerRef = useRef(null);
           setHeaderData2(response1.data);
         }
       } catch (err) {
-        console.error("Transcription failed:", err);
+        toast.error("Something Network Issue")
+        //console.error("Transcription failed:", err);
       } finally {
         setLoad(false);
       }
@@ -215,6 +219,7 @@ const silenceTimerRef = useRef(null);
         border: "1px solid #C0C0C0",
       }}
     >
+      <ToastContainer position="bottom-right"/>
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         {/* LEFT SECTION */}
         <Stack direction="row" spacing={3} alignItems="center">
@@ -545,7 +550,9 @@ const VitalItem = ({ icon, label, value }) => (
         {value}
       </Typography>
     </Box>
+    
   </Stack>
+  
 );
 
 export default HeaderBar;
