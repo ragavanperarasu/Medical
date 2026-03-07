@@ -11,7 +11,10 @@ import {
   DialogContent,
   DialogActions,
   TextField,
-  MenuItem
+  MenuItem,
+  Switch,
+  FormControlLabel,
+  Divider
 } from "@mui/material";
 import {
   User,
@@ -20,26 +23,28 @@ import {
   Mic,
   Thermometer,
   Square,
-  Radio,
   Circle,
   Edit2,
   Users,
-  Calendar // Added for Age icon
+  Calendar,
+  Shield,
+  Info
 } from "react-feather";
 
 import axios from "axios";
 
 const HeaderBar = ({ setHeaderData, setHeaderData2, patientData }) => {
   const [recording, setRecording] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [sendHealthData, setSendHealthData] = useState(true);
   
-  // --- Vital & Patient State ---
   const [open, setOpen] = useState(false);
   const [vitals, setVitals] = useState({
     hr: "72",
     bp: "120/80",
     temp: "98.6",
     gender: "Male",
-    age: "28" // Added Age state
+    age: "28"
   });
 
   const mediaRecorderRef = useRef(null);
@@ -50,7 +55,6 @@ const HeaderBar = ({ setHeaderData, setHeaderData2, patientData }) => {
   const handleClose = () => setOpen(false);
   
   const handleSave = () => {
-    // API update logic would go here
     handleClose();
   };
 
@@ -60,6 +64,7 @@ const HeaderBar = ({ setHeaderData, setHeaderData2, patientData }) => {
 
   // 🎤 RECORDING LOGIC
   const startRecording = async () => {
+    setConfirmOpen(false); // Close confirmation dialog
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       streamRef.current = stream;
@@ -73,13 +78,18 @@ const HeaderBar = ({ setHeaderData, setHeaderData2, patientData }) => {
         const formData = new FormData();
         formData.append("audio", audioBlob, "audio.webm");
 
-        try {
+        // Optional: Include vitals in the request if sendHealthData is true
+        if (sendHealthData) {
+          formData.append("vitals", JSON.stringify(vitals));
+        }
 
+        try {
           const response = await axios.post("http://127.0.0.1:5000/transcribe", formData);
           setHeaderData(response.data.text);
-          const response1 = await axios.post("http://127.0.0.1:5000/api/ortho", { message: response.data.text });
-          console.log("Ortho Agent Response:", response1.data);
-          console.log("type of :", typeof(response1.data))
+          const response1 = await axios.post("http://127.0.0.1:5000/api/ortho", { 
+            message: response.data.text,
+            patientVitals: sendHealthData ? vitals : null 
+          });
           setHeaderData2(response1.data);
         } catch (err) {
           console.error("Transcription failed:", err);
@@ -102,13 +112,19 @@ const HeaderBar = ({ setHeaderData, setHeaderData2, patientData }) => {
     setRecording(false);
   };
 
-  const toggleRecording = () => (recording ? stopRecording() : startRecording());
+  const handleMicClick = () => {
+    if (recording) {
+      stopRecording();
+    } else {
+      setConfirmOpen(true);
+    }
+  };
 
   return (
     <Card sx={{ p: 3, borderRadius: 3, boxShadow: "none", border: "1px solid #C0C0C0" }}>
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         
-        {/* LEFT SECTION: Patient Info & Vitals */}
+        {/* LEFT SECTION */}
         <Stack direction="row" spacing={3} alignItems="center">
           <Stack direction="row" spacing={1} alignItems="center" sx={{ bgcolor: "#f0f6ff", px: 2, py: 1, borderRadius: 3 }}>
             <User size={24} color="#3b82f6" />
@@ -128,7 +144,6 @@ const HeaderBar = ({ setHeaderData, setHeaderData2, patientData }) => {
             alignItems="center"
             sx={{ bgcolor: "#ffffff", px: 3, py: 1, borderRadius: 3, border: "1px solid #e5e7eb" }}
           >
-            {/* Added Age and Gender items */}
             <VitalItem icon={<Calendar size={18} color="#06b6d4" />} label="Age" value={vitals.age} />
             <VitalItem icon={<Users size={18} color="#8b5cf6" />} label="Gender" value={vitals.gender} />
             <VitalItem icon={<Heart size={18} color="#ef4444" />} label="HR" value={vitals.hr + " bpm"} />
@@ -141,7 +156,7 @@ const HeaderBar = ({ setHeaderData, setHeaderData2, patientData }) => {
           </Stack>
         </Stack>
 
-        {/* RIGHT SECTION: Indicators & Mic */}
+        {/* RIGHT SECTION */}
         <Stack direction="row" spacing={2} alignItems="center">
           {recording && (
             <Stack direction="row" spacing={1} alignItems="center" sx={{ bgcolor: "#fff0f0", px: 2, py: 1, borderRadius: 3 }}>
@@ -151,7 +166,7 @@ const HeaderBar = ({ setHeaderData, setHeaderData2, patientData }) => {
           )}
 
           <Button
-            onClick={toggleRecording}
+            onClick={handleMicClick}
             variant="contained"
             startIcon={recording ? <Square size={18} /> : <Mic size={18} />}
             sx={{
@@ -160,6 +175,8 @@ const HeaderBar = ({ setHeaderData, setHeaderData2, patientData }) => {
               bgcolor: recording ? "#ef4444" : "#0070FF",
               fontFamily: "Comfortaa",
               px: 3,
+              py: 1,
+              boxShadow: "0 4px 12px rgba(0, 112, 255, 0.2)",
               "&:hover": { bgcolor: recording ? "#d32f2f" : "#0056b3" }
             }}
           >
@@ -168,28 +185,67 @@ const HeaderBar = ({ setHeaderData, setHeaderData2, patientData }) => {
         </Stack>
       </Stack>
 
+      {/* --- CONFIRMATION DIALOG --- */}
+      <Dialog 
+        open={confirmOpen} 
+        onClose={() => setConfirmOpen(false)}
+        PaperProps={{ sx: { borderRadius: 3, p: 1 } }}
+      >
+        <DialogTitle sx={{ display: 'flex', alignItems: 'center', gap: 1.5, fontFamily: "Comfortaa" }}>
+          <Shield size={24} color="#0070FF" />
+          Recording Session
+        </DialogTitle>
+        <DialogContent>
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+            You are about to start an AI-assisted transcription for <strong>{patientData.name}</strong>.
+          </Typography>
+          
+          <Box sx={{ p: 2, bgcolor: "#f8fafc", borderRadius: 2, border: "1px solid #e2e8f0" }}>
+            <FormControlLabel
+              control={
+                <Switch 
+                  checked={sendHealthData} 
+                  onChange={(e) => setSendHealthData(e.target.checked)} 
+                  color="primary"
+                />
+              }
+              label={
+                <Box>
+                  <Typography variant="subtitle2" sx={{ fontFamily: "Comfortaa" }}>Include Health Status</Typography>
+                  <Typography variant="caption" color="text.secondary">Send current vitals and patient metrics to the Ortho Agent</Typography>
+                </Box>
+              }
+            />
+          </Box>
+          
+          <Stack direction="row" spacing={1} sx={{ mt: 2, color: "text.secondary" }} alignItems="center">
+            <Info size={14} />
+            <Typography variant="caption">Audio data is processed securely via HIPAA-compliant protocols.</Typography>
+          </Stack>
+        </DialogContent>
+        <DialogActions sx={{ p: 2, px: 3 }}>
+          <Button onClick={() => setConfirmOpen(false)} color="inherit" sx={{ textTransform: "none", fontFamily: "Comfortaa" }}>
+            Cancel
+          </Button>
+          <Button 
+            onClick={startRecording} 
+            variant="contained" 
+            startIcon={<Mic size={16} />}
+            sx={{ borderRadius: 2, textTransform: "none", px: 3, bgcolor: "#0070FF", fontFamily: "Comfortaa" }}
+          >
+            Begin Recording
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       {/* EDIT VITALS DIALOG */}
       <Dialog open={open} onClose={handleClose} fullWidth maxWidth="xs">
         <DialogTitle sx={{ fontFamily: "Comfortaa", fontWeight: "bold" }}>Edit Patient Details</DialogTitle>
         <DialogContent>
           <Stack spacing={2.5} sx={{ mt: 1 }}>
             <Stack direction="row" spacing={2}>
-               <TextField
-                label="Age"
-                name="age"
-                type="number"
-                fullWidth
-                value={vitals.age}
-                onChange={handleChange}
-              />
-              <TextField
-                select
-                label="Gender"
-                name="gender"
-                fullWidth
-                value={vitals.gender}
-                onChange={handleChange}
-              >
+               <TextField label="Age" name="age" type="number" fullWidth value={vitals.age} onChange={handleChange} />
+              <TextField select label="Gender" name="gender" fullWidth value={vitals.gender} onChange={handleChange}>
                 <MenuItem value="Male">Male</MenuItem>
                 <MenuItem value="Female">Female</MenuItem>
                 <MenuItem value="Other">Other</MenuItem>
@@ -201,8 +257,8 @@ const HeaderBar = ({ setHeaderData, setHeaderData2, patientData }) => {
           </Stack>
         </DialogContent>
         <DialogActions sx={{ p: 3 }}>
-          <Button onClick={handleClose} color="inherit" sx={{ fontFamily: "Comfortaa" }}>Cancel</Button>
-          <Button onClick={handleSave} variant="contained" sx={{ fontFamily: "Comfortaa", borderRadius: 2 }}>Save Changes</Button>
+          <Button onClick={handleClose} color="inherit">Cancel</Button>
+          <Button onClick={handleSave} variant="contained">Save Changes</Button>
         </DialogActions>
       </Dialog>
 

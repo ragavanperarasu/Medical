@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Card,
   Typography,
@@ -15,32 +15,27 @@ import {
 } from "@mui/material";
 import { HelpCircle, MessageSquare, Info, CheckCircle } from "react-feather";
 
-const initialQuestions = [
-  { id: 1, question: "Have you experienced any chest pain or shortness of breath today?", reason: "To rule out immediate cardiac distress or pulmonary embolism symptoms." },
-  { id: 2, question: "Is the pain localized to one spot or does it radiate elsewhere?", reason: "Radiation patterns can distinguish between musculoskeletal and referred organ pain." },
-  { id: 3, question: "When did the symptoms first start, and was the onset sudden?", reason: "Sudden onset often points to acute trauma; gradual suggests inflammatory issues." },
-  { id: 4, question: "Are you currently taking any blood thinners or anticoagulants?", reason: "Crucial for determining surgical risk or physical exam safety." },
-  { id: 5, question: "Does anything specific make the pain better or worse?", reason: "Helps identify mechanical vs systemic triggers." },
-  { id: 6, question: "Have you noticed any swelling or redness in your lower extremities?", reason: "Screens for Deep Vein Thrombosis (DVT)." },
-  { id: 7, question: "Have you had a fever or chills in the last 24 hours?", reason: "Identifies systemic infection or inflammatory response." },
-  { id: 8, question: "Rate your pain on a scale of 1-10 at this exact moment.", reason: "Establishes a clinical baseline for pain management." },
-  { id: 9, question: "Have you had any previous surgeries related to this specific area?", reason: "Surgical history alters physical presentation and diagnostic approach." },
-  { id: 10, question: "Are you experiencing any numbness or tingling?", reason: "Assesses neurological involvement or nerve compression." },
-];
-
-const CurrentComplaint = ({patientQus}) => {
-  // State Management
-  const [activeQuestions, setActiveQuestions] = useState(patientQus.questions_to_ask);
+const CurrentComplaint = ({ patientQus }) => {
+  // 1. Initialize states with empty arrays to prevent "undefined" errors
+  const [activeQuestions, setActiveQuestions] = useState([]);
   const [completedQuestions, setCompletedQuestions] = useState([]);
   const [selectedQuestion, setSelectedQuestion] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
 
-  // Handle Question Completion
-  const handleMarkAsDone = (id) => {
-    const questionToMove = activeQuestions.find((q) => q.id === id);
+  // 2. Synchronize internal state when patientQus prop changes (API arrival)
+  useEffect(() => {
+    if (patientQus?.questions_to_ask) {
+      setActiveQuestions(patientQus.questions_to_ask);
+      setCompletedQuestions([]); // Reset done list if new data arrives
+    }
+  }, [patientQus]);
+
+  // 3. Handle Question Completion using the question text as the key
+  const handleMarkAsDone = (questionText) => {
+    const questionToMove = activeQuestions.find((q) => q.question === questionText);
     if (questionToMove) {
       setCompletedQuestions((prev) => [...prev, questionToMove]);
-      setActiveQuestions((prev) => prev.filter((q) => q.id !== id));
+      setActiveQuestions((prev) => prev.filter((q) => q.question !== questionText));
     }
   };
 
@@ -71,7 +66,7 @@ const CurrentComplaint = ({patientQus}) => {
       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3 }}>
         <Typography
           variant="h6"
-          sx={{ fontWeight: 700, fontFamily: "Comfortaa", display: "flex", alignItems: "center", gap: 1.5 , fontSize: 18 }}
+          sx={{ fontWeight: 700, fontFamily: "Comfortaa", display: "flex", alignItems: "center", gap: 1.5, fontSize: 18 }}
         >
           <MessageSquare size={22} color="#2563eb" />
           Required Follow-up Questions
@@ -79,13 +74,11 @@ const CurrentComplaint = ({patientQus}) => {
         <Box sx={{ display: 'flex', gap: 1 }}>
           <Chip 
             label={`${activeQuestions.length} Pending`} 
-            size="small" 
             sx={{ bgcolor: "#eff6ff", color: "#2563eb", fontWeight: 700, fontFamily: "Comfortaa" }} 
           />
           {completedQuestions.length > 0 && (
             <Chip 
               label={`${completedQuestions.length} Done`} 
-              size="small" 
               sx={{ bgcolor: "#f0fdf4", color: "#16a34a", fontWeight: 700, fontFamily: "Comfortaa" }} 
             />
           )}
@@ -94,7 +87,7 @@ const CurrentComplaint = ({patientQus}) => {
 
       <Divider sx={{ mb: 3 }} />
 
-      {/* Questions List - Scrollable */}
+      {/* Questions List */}
       <Stack 
         spacing={2} 
         sx={{ 
@@ -106,10 +99,10 @@ const CurrentComplaint = ({patientQus}) => {
           "&::-webkit-scrollbar-thumb": { background: "#cbd5e1", borderRadius: "10px" },
         }}
       >
-        {patientQus.questions_to_ask.length > 0 ? (
-          patientQus.questions_to_ask.map((item, index) => (
+        {activeQuestions.length > 0 ? (
+          activeQuestions.map((item, index) => (
             <Box
-              key={index+1}
+              key={item.question} // Use question text as key if no ID exists
               sx={{
                 p: 2,
                 borderRadius: 3,
@@ -153,7 +146,7 @@ const CurrentComplaint = ({patientQus}) => {
                 
                 <Tooltip title="Mark as Asked">
                   <IconButton 
-                    onClick={() => handleMarkAsDone(item.id)}
+                    onClick={() => handleMarkAsDone(item.question)}
                     sx={{ 
                       color: "#9CA3AF", 
                       "&:hover": { color: "#16a34a", bgcolor: "#f0fdf4" } 
@@ -168,13 +161,13 @@ const CurrentComplaint = ({patientQus}) => {
         ) : (
           <Box sx={{ textAlign: 'center', py: 4 }}>
             <Typography sx={{ fontFamily: "Philosopher", color: "#64748b" }}>
-              All follow-up questions have been addressed.
+              {patientQus?.questions_to_ask ? "All follow-up questions have been addressed." : "No follow-up questions required yet."}
             </Typography>
           </Box>
         )}
       </Stack>
 
-      {/* Clinical Reasoning Dialog */}
+      {/* Reasoning Dialog remains similar but with safer chaining */}
       <Dialog 
         open={modalOpen} 
         onClose={handleClose}
@@ -186,15 +179,12 @@ const CurrentComplaint = ({patientQus}) => {
         </DialogTitle>
         <DialogContent>
           <Box sx={{ bgcolor: "#F0F7FF", p: 2, borderRadius: 2, mb: 2 }}>
-            <Typography variant="body2" sx={{ color: "#1E40AF", fontWeight: 600, mb: 0.5, fontFamily: "Philosopher" }}>
-              Selected Question:
-            </Typography>
             <Typography sx={{ fontFamily: "Philosopher", fontSize: 15, fontStyle: "italic", color: "#374151" }}>
               "{selectedQuestion?.question}"
             </Typography>
           </Box>
           <Typography sx={{ fontFamily: "Philosopher", color: "#4B5563", lineHeight: 1.6 }}>
-            {selectedQuestion?.reason}
+            {selectedQuestion?.reason || "Reasoning not provided for this question."}
           </Typography>
         </DialogContent>
         <DialogActions sx={{ p: 2 }}>
@@ -212,8 +202,7 @@ const CurrentComplaint = ({patientQus}) => {
   );
 };
 
-// Helper component for the header chips
-const Chip = ({ label, size, sx }) => (
+const Chip = ({ label, sx }) => (
   <Box sx={{ ...sx, px: 1.5, py: 0.5, borderRadius: 5, fontSize: '0.75rem' }}>
     {label}
   </Box>

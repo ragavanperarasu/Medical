@@ -12,7 +12,7 @@ import HeaderBar from './HeaderBar'
 
 const PatientPage = () => {
 const [headerData, setHeaderData] = useState("Start you conversation by clicking the start recording button.");
-const [headerData2, setHeaderData2] = useState("Start you conversation by clicking the start recording button.");
+const [headerData2, setHeaderData2] = useState([]);
 const [patientData, setPatientData] = useState({});
 const location = useLocation();
 
