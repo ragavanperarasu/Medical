@@ -26,6 +26,7 @@ const PreviousHealthData = () => {
     "Medications": ["Metformin 500mg", "Lisinopril 10mg"],
     "Surgical History": ["Appendectomy (2015)"]
   });
+  console.log(healthData)
 
   // 2. State for Dialog
   const [open, setOpen] = useState(false);
@@ -189,12 +190,12 @@ const PreviousHealthData = () => {
           />
         </DialogContent>
         <DialogActions sx={{ p: 2 }}>
-          <Button onClick={handleClose} color="inherit">Cancel</Button>
+          <Button onClick={handleClose} color="inherit" sx={{textTransform:"none", fontFamily:"Philosopher"}}>Cancel</Button>
           <Button 
             onClick={handleSave} 
             variant="contained" 
             disabled={!inputValue.trim()}
-            sx={{ borderRadius: 2, textTransform: "none" }}
+            sx={{ borderRadius: 2, textTransform: "none", fontFamily:"Philosopher"}}
           >
             Save Information
           </Button>

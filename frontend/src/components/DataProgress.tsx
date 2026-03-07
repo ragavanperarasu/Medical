@@ -8,21 +8,68 @@ import { ChevronDown, CheckCircle, XCircle, Activity, Clipboard } from "react-fe
 // 1. Separate JSON Data Structure
 const INITIAL_SECTIONS = [
   {
-    id: "med_hist",
-    name: "Medical History",
+    id: "chief_complaint",
+    name: "Chief Complaint",
     statements: [
-      { id: "h1", question: "Previous Surgeries", status: true },
-      { id: "h2", question: "Chronic Conditions", status: false },
-      { id: "h3", question: "Family History", status: true },
+      { id: "c1", question: "Location of Pain (knee, back, shoulder, etc.)", status: false },
+      { id: "c2", question: "Duration of Pain", status: false },
+      { id: "c3", question: "Pain Severity (1-10 scale)", status: false },
+      { id: "c4", question: "Type of Pain (sharp, dull, burning)", status: false }
     ]
   },
   {
-    id: "meds",
-    name: "Medications & Supplements",
+    id: "injury_history",
+    name: "Injury History",
     statements: [
-      { id: "m1", question: "Daily Vitamins", status: false },
-      { id: "m2", question: "Herbal Remedies", status: false },
-      { id: "m3", question: "Prescription Meds", status: true },
+      { id: "i1", question: "Recent Fall or Accident", status: false },
+      { id: "i2", question: "Sports Injury", status: false },
+      { id: "i3", question: "Previous Fracture", status: false }
+    ]
+  },
+  {
+    id: "movement_function",
+    name: "Movement & Function",
+    statements: [
+      { id: "mf1", question: "Difficulty Walking", status: false },
+      { id: "mf2", question: "Difficulty Standing", status: false },
+      { id: "mf3", question: "Joint Stiffness", status: false },
+      { id: "mf4", question: "Limited Range of Motion", status: false }
+    ]
+  },
+  {
+    id: "swelling_symptoms",
+    name: "Swelling & Physical Symptoms",
+    statements: [
+      { id: "s1", question: "Joint Swelling", status: false },
+      { id: "s2", question: "Redness Around Joint", status: false },
+      { id: "s3", question: "Warmth Around Joint", status: false }
+    ]
+  },
+  {
+    id: "medical_history",
+    name: "Orthopedic Medical History",
+    statements: [
+      { id: "mh1", question: "Previous Bone Surgery", status: false },
+      { id: "mh2", question: "Arthritis History", status: false },
+      { id: "mh3", question: "Osteoporosis", status: false }
+    ]
+  },
+  {
+    id: "lifestyle_activity",
+    name: "Lifestyle & Physical Activity",
+    statements: [
+      { id: "l1", question: "Daily Physical Activity", status: false },
+      { id: "l2", question: "Heavy Lifting at Work", status: false },
+      { id: "l3", question: "Sports Participation", status: false }
+    ]
+  },
+  {
+    id: "medications",
+    name: "Medications",
+    statements: [
+      { id: "m1", question: "Pain Relief Medications", status: false },
+      { id: "m2", question: "Anti-inflammatory Drugs", status: false },
+      { id: "m3", question: "Calcium or Bone Supplements", status: false }
     ]
   }
 ];
@@ -55,13 +102,30 @@ const DataProgress = () => {
   };
 
   return (
-    <Card sx={{ p: 3, borderRadius: 4, border: '1px solid #C0C0C0', boxShadow: 'none', bgcolor: 'white', minHeight: '75vh' }}>
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 3 }}>
-        <Clipboard size={20} color="#007FFF" />
-        <Typography variant="h6" fontWeight="800" sx={{ color: '#1A2027', fontFamily: 'Comfortaa', fontSize: 18 }}>
-          Data Collection Progress
-        </Typography>
-      </Box>
+    <Card sx={{px:3,pb:3, borderRadius: 4, border: '1px solid #C0C0C0', boxShadow: 'none', bgcolor: 'white', minHeight: '75vh', overflowY:'auto', maxHeight:'50vh', pr: 1,
+          "&::-webkit-scrollbar": { width: "6px" },
+          "&::-webkit-scrollbar-track": { background: "#f1f1f1", borderRadius: "10px", mt:10, mb:5 },
+          "&::-webkit-scrollbar-thumb": { background: "#cbd5e1", borderRadius: "10px" },}}>
+      <Typography
+              variant="h6"
+              fontWeight="bold"
+              sx={{
+                fontFamily: "Comfortaa",
+                fontSize: 18,
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+                color: "#000000",
+                position: "sticky",
+                top: 0,
+                zIndex: 1,
+                bgcolor: "white",
+                py: 2
+              }}
+            >
+              <Clipboard size={22} color="#2563eb" />
+              Health Status
+            </Typography>
 
       <Stack spacing={2}>
         {/* 4. Map through the JSON Sections */}
@@ -73,7 +137,7 @@ const DataProgress = () => {
               key={section.id}
               elevation={0} 
               disableGutters 
-              defaultExpanded={true}
+              
               sx={{ 
                 '&:before': { display: 'none' },
                 border: '1px solid #F0F2F5',
