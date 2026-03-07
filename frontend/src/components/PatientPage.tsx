@@ -13,6 +13,7 @@ import HeaderBar from './HeaderBar'
 const PatientPage = () => {
 const [headerData, setHeaderData] = useState("Start you conversation by clicking the start recording button.");
 const [headerData2, setHeaderData2] = useState([]);
+const [patientHelthData, setPatientHelthData] = useState();
 const [patientData, setPatientData] = useState({});
 const location = useLocation();
 
@@ -26,12 +27,14 @@ setPatientData(data);
       <Container maxWidth="xl">
         <HeaderBar
         patientData={patientData}
+        patientHelthData={patientHelthData}
   setHeaderData={setHeaderData}
   setHeaderData2={setHeaderData2}
+
 />
         <Grid container spacing={2} sx={{ mt: 2 }}>
           <Grid size={{ xs: 12, md: 3 }}>
-            <PreviousHealthData />
+            <PreviousHealthData setPatientHelthData={setPatientHelthData} />
           </Grid>
 
           <Grid size={{ xs: 12, md: 6 }}>

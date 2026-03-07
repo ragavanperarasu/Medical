@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Card,
   Typography,
@@ -17,7 +17,7 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Activity, Plus, Edit3, Trash2 } from "react-feather";
 
-const PreviousHealthData = () => {
+const PreviousHealthData = ({setPatientHelthData}) => {
   // 1. Manage health data in state
   const [healthData, setHealthData] = useState({
     "Medical History": ["Diabetes", "Hypertension"],
@@ -26,7 +26,10 @@ const PreviousHealthData = () => {
     "Medications": ["Metformin 500mg", "Lisinopril 10mg"],
     "Surgical History": ["Appendectomy (2015)"]
   });
-  console.log(healthData)
+  
+  useEffect(()=>{
+    setPatientHelthData(healthData)
+  },[healthData])
 
   // 2. State for Dialog
   const [open, setOpen] = useState(false);
