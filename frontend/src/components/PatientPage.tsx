@@ -36,7 +36,7 @@ setPatientData(data);
 
           <Grid size={{ xs: 12, md: 6 }}>
             <PatientStatus patientData={patientData} />
-            <CurrentComplaint />
+            <CurrentComplaint patientQus={headerData2} />
           </Grid>
             <Grid size={{ xs: 12, md: 3 }}>
                 <DataProgress />

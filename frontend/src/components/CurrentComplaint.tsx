@@ -28,9 +28,9 @@ const initialQuestions = [
   { id: 10, question: "Are you experiencing any numbness or tingling?", reason: "Assesses neurological involvement or nerve compression." },
 ];
 
-const CurrentComplaint = () => {
+const CurrentComplaint = ({patientQus}) => {
   // State Management
-  const [activeQuestions, setActiveQuestions] = useState(initialQuestions);
+  const [activeQuestions, setActiveQuestions] = useState(patientQus.questions_to_ask);
   const [completedQuestions, setCompletedQuestions] = useState([]);
   const [selectedQuestion, setSelectedQuestion] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
@@ -106,10 +106,10 @@ const CurrentComplaint = () => {
           "&::-webkit-scrollbar-thumb": { background: "#cbd5e1", borderRadius: "10px" },
         }}
       >
-        {activeQuestions.length > 0 ? (
-          activeQuestions.map((item, index) => (
+        {patientQus.questions_to_ask.length > 0 ? (
+          patientQus.questions_to_ask.map((item, index) => (
             <Box
-              key={item.id}
+              key={index+1}
               sx={{
                 p: 2,
                 borderRadius: 3,

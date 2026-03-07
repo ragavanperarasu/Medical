@@ -52,7 +52,7 @@ app.post("/transcribe", upload.single("audio"), async (req, res) => {
     console.log("Transcription:", transcription.text);
     // 🌍 Step 2: Translate Tamil text → English
     const translation = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
+      model: "gpt-4o",
 messages: [
   {
     role: "system",
@@ -119,7 +119,7 @@ app.post("/api/ortho", async (req: Request, res: Response) => {
     console.log("Received message for ortho:", message);
     const result = await runWorkflowOrtho({ input_as_text: message });
    // console.log("Ortho Agent Result:", result);
-    res.json(result.output_text);
+    res.json(result.output_parsed);
 
   } catch (error: any) {
     res.status(500).json({ success: false, error: error.message });
