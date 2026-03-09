@@ -129,7 +129,13 @@ const silenceTimerRef = useRef(null);
           const pd = JSON.stringify(patientHelthData);
           const pd2 = JSON.stringify(vitals);
 
-          const fpd = `"""${pd2} ${pd}""" Above data is about the patient so this data is use to analyse more effeciently. then below i give patient and doctor conversation """${response.data.text}"""`;
+          const fpd = `
+          PATIENT PROFILE:
+          ${pd2} 
+          ${pd} 
+          
+          CONVERSATION:
+          ${response.data.text}`;
 
           const response1 = await axios.post(
             "http://127.0.0.1:5000/api/ortho",

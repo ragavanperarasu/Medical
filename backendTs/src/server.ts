@@ -5,6 +5,7 @@ import "dotenv/config";
 import { OpenAI, toFile } from "openai";
 import { runWorkflow } from "./workflow.js"; // MUST use .js extension here
 import { runWorkflowOrtho } from "./orthoAgent.js"; // MUST use .js extension here
+import { summaryForLLM } from "./summaryForLLM.js"; // MUST use .js extension here
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -118,7 +119,16 @@ app.post("/api/ortho", async (req: Request, res: Response) => {
     const { message } = req.body;
     console.log("Received message for ortho:", message);
     const result = await runWorkflowOrtho({ input_as_text: message });
-    console.log("Ortho Agent Result:", result);
+    const his = `
+    ${message}
+    ORTHO AGENT OUTPUT:
+    ${result.output_text}
+    `
+    const result1 = await summaryForLLM({ input_as_text: his });
+
+    // console.log("Ortho Agent Result:", result);
+    // console.log("Summary for LLM Result:", result1);
+
     res.json(result.output_parsed);
 
   } catch (error: any) {
