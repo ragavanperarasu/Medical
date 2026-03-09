@@ -47,6 +47,7 @@ const HeaderBar = ({
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [sendHealthData, setSendHealthData] = useState(true);
   const [load, setLoad] = useState(false);
+  const [history, setHistory] = useState("");
 
   const audioContextRef = useRef(null);
 const analyserRef = useRef(null);
@@ -125,7 +126,23 @@ const silenceTimerRef = useRef(null);
 
         setHeaderData(response.data.text);
 
-        if (sendHealthData) {
+
+        if(history !== ""){
+          const senddata = `
+          OLD CONVERSATION:
+          ${history}
+
+          NEXT CONVERSATION:
+          ${response.data.text}
+          `;
+          const response1 = await axios.post(
+            "http://127.0.0.1:5000/api/ortho",
+            { message: senddata }
+          );
+          setHeaderData2(response1.data.llm);
+          setHistory(response.data.summary);
+        }
+        else if (sendHealthData) {
           const pd = JSON.stringify(patientHelthData);
           const pd2 = JSON.stringify(vitals);
 
@@ -142,14 +159,17 @@ const silenceTimerRef = useRef(null);
             { message: fpd }
           );
 
-          setHeaderData2(response1.data);
-        } else {
+          setHeaderData2(response1.data.llm);
+          setHistory(response.data.summary);
+        }
+        else {
           const response1 = await axios.post(
             "http://127.0.0.1:5000/api/ortho",
             { message: response.data.text }
           );
 
-          setHeaderData2(response1.data);
+          setHeaderData2(response1.data.llm);
+          setHistory(response.data.summary);
         }
       } catch (err) {
         toast.error("Something Network Issue")
