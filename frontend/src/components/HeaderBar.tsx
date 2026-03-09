@@ -55,9 +55,9 @@ const silenceTimerRef = useRef(null);
 
   const [open, setOpen] = useState(false);
   const [vitals, setVitals] = useState({
-    hr: "72",
+    heartrate: "72",
     bp: "120/80",
-    temp: "98.6",
+    tempinfahrenheit: "98.6",
     gender: "Male",
     age: "28",
   });
@@ -99,33 +99,6 @@ const silenceTimerRef = useRef(null);
     source.connect(analyser);
     analyserRef.current = analyser;
 
-    const dataArray = new Uint8Array(analyser.frequencyBinCount);
-
-    const detectSilence = () => {
-      analyser.getByteFrequencyData(dataArray);
-
-      const volume = dataArray.reduce((a, b) => a + b) / dataArray.length;
-
-      if (volume < 5) {
-        // silence detected
-        if (!silenceTimerRef.current) {
-          silenceTimerRef.current = setTimeout(() => {
-            stopRecording();
-          }, 3000); // 3 seconds silence
-        }
-      } else {
-        // speaking
-        clearTimeout(silenceTimerRef.current);
-        silenceTimerRef.current = null;
-      }
-
-      if (recording) {
-        requestAnimationFrame(detectSilence);
-      }
-    };
-
-    detectSilence();
-
     mediaRecorder.ondataavailable = (event) => {
       audioChunksRef.current.push(event.data);
     };
@@ -154,8 +127,9 @@ const silenceTimerRef = useRef(null);
 
         if (sendHealthData) {
           const pd = JSON.stringify(patientHelthData);
+          const pd2 = JSON.stringify(vitals);
 
-          const fpd = `"""${pd}""" Above data is about the patient so this data is use to analyse more effeciently. then below i give patient and doctor conversation """${response.data.text}"""`;
+          const fpd = `"""${pd2} ${pd}""" Above data is about the patient so this data is use to analyse more effeciently. then below i give patient and doctor conversation """${response.data.text}"""`;
 
           const response1 = await axios.post(
             "http://127.0.0.1:5000/api/ortho",
@@ -271,8 +245,8 @@ const silenceTimerRef = useRef(null);
             />
             <VitalItem
               icon={<Heart size={18} color="#ef4444" />}
-              label="HR"
-              value={vitals.hr + " bpm"}
+              label="Heart Rate"
+              value={vitals.heartrate + " bpm"}
             />
             <VitalItem
               icon={<Activity size={18} color="#2563eb" />}
@@ -282,7 +256,7 @@ const silenceTimerRef = useRef(null);
             <VitalItem
               icon={<Thermometer size={18} color="#f97316" />}
               label="Temp"
-              value={vitals.temp + "°F"}
+              value={vitals.tempinfahrenheit + "°F"}
             />
 
             <IconButton
@@ -468,9 +442,9 @@ const silenceTimerRef = useRef(null);
             </Stack>
             <TextField
               label="Heart Rate (bpm)"
-              name="hr"
+              name="heartrate"
               fullWidth
-              value={vitals.hr}
+              value={vitals.heartrate}
               onChange={handleChange}
             />
             <TextField
@@ -484,7 +458,7 @@ const silenceTimerRef = useRef(null);
               label="Temperature (°F)"
               name="temp"
               fullWidth
-              value={vitals.temp}
+              value={vitals.tempinfahrenheit}
               onChange={handleChange}
             />
           </Stack>

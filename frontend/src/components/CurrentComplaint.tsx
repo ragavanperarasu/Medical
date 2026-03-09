@@ -12,25 +12,24 @@ import {
   Divider,
   IconButton,
   Tooltip,
+  LinearProgress,
+  Grid
 } from "@mui/material";
-import { HelpCircle, MessageSquare, Info, CheckCircle } from "react-feather";
+import { HelpCircle, MessageSquare, Info, CheckCircle, Activity } from "react-feather";
 
 const CurrentComplaint = ({ patientQus }) => {
-  // 1. Initialize states with empty arrays to prevent "undefined" errors
   const [activeQuestions, setActiveQuestions] = useState([]);
   const [completedQuestions, setCompletedQuestions] = useState([]);
   const [selectedQuestion, setSelectedQuestion] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
 
-  // 2. Synchronize internal state when patientQus prop changes (API arrival)
   useEffect(() => {
     if (patientQus?.questions_to_ask) {
       setActiveQuestions(patientQus.questions_to_ask);
-      setCompletedQuestions([]); // Reset done list if new data arrives
+      setCompletedQuestions([]);
     }
   }, [patientQus]);
 
-  // 3. Handle Question Completion using the question text as the key
   const handleMarkAsDone = (questionText) => {
     const questionToMove = activeQuestions.find((q) => q.question === questionText);
     if (questionToMove) {
@@ -59,39 +58,115 @@ const CurrentComplaint = ({ patientQus }) => {
         border: "1px solid #C0C0C0",
         bgcolor: "#fff",
         boxShadow: "none",
-        mt: 2
+        mt: 2,
       }}
     >
-      {/* Header */}
+ {/* SECTION 1: Suspected Causes */}
+      <Box sx={{ mb: 4 }}>
+  <Typography
+    variant="subtitle1"
+    sx={{ 
+      fontWeight: 700, 
+      fontFamily: "Comfortaa", 
+      display: "flex", 
+      alignItems: "center", 
+      gap: 1.5, 
+      mb: 2.5, 
+      color: "#1e293b" 
+    }}
+  >
+    <Activity size={20} color="#ef4444" />
+    Suspected Clinical Causes
+  </Typography>
+
+  <Grid container spacing={2}>
+    {patientQus?.suspected_cause?.map((item, index) => {
+      // Professional color logic based on probability
+      const isHighProb = item.probability >= 40;
+      const bgColor = isHighProb ? "#eff6ff" : "#f8fafc";
+      const borderColor = isHighProb ? "#bfdbfe" : "#e2e8f0";
+      const textColor = isHighProb ? "#1e40af" : "#475569";
+
+      return (
+        <Grid size={6} key={index}>
+          <Box
+            sx={{
+              px: 2,
+              py: 1,
+              borderRadius: 3,
+              bgcolor: bgColor,
+              border: `1px solid ${borderColor}`,
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              transition: "transform 0.2s",
+              "&:hover": { transform: "translateY(-2px)" }
+            }}
+          >
+            <Typography 
+              sx={{ 
+                fontFamily: "Philosopher", 
+                fontSize: 14, 
+                fontWeight: 700, 
+                color: textColor 
+              }}
+            >
+              {item.cause}
+            </Typography>
+            
+            <Box sx={{ textAlign: "right" }}>
+              <Typography 
+                sx={{ 
+                  fontFamily: "Comfortaa", 
+                  fontSize: 15, 
+                  fontWeight: 800, 
+                  color: isHighProb ? "#2563eb" : "#64748b" 
+                }}
+              >
+                {item.probability}%
+              </Typography>
+              <Typography 
+                sx={{ 
+                  fontFamily: "Philosopher", 
+                  fontSize: 10, 
+                  textTransform: "uppercase", 
+                  letterSpacing: 1,
+                  color: isHighProb ? "#60a5fa" : "#94a3b8",
+                  lineHeight: 1
+                }}
+              >
+                Match
+              </Typography>
+            </Box>
+          </Box>
+        </Grid>
+      );
+    })}
+  </Grid>
+</Box>
+      <Divider sx={{ mb: 3 }} />
+
+      {/* SECTION 2: Follow-up Questions */}
       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3 }}>
         <Typography
           variant="h6"
           sx={{ fontWeight: 700, fontFamily: "Comfortaa", display: "flex", alignItems: "center", gap: 1.5, fontSize: 18 }}
         >
           <MessageSquare size={22} color="#2563eb" />
-          Required Follow-up Questions
+          Recommended Follow-up
         </Typography>
-        <Box sx={{ display: 'flex', gap: 1 }}>
-          <Chip 
-            label={`${activeQuestions.length} Pending`} 
-            sx={{ bgcolor: "#eff6ff", color: "#2563eb", fontWeight: 700, fontFamily: "Comfortaa" }} 
+        <Box sx={{ display: "flex", gap: 1 }}>
+          <Chip
+            label={`${activeQuestions.length} Required`}
+            sx={{ bgcolor: "#eff6ff", color: "#2563eb", fontWeight: 700, fontFamily: "Comfortaa" }}
           />
-          {completedQuestions.length > 0 && (
-            <Chip 
-              label={`${completedQuestions.length} Done`} 
-              sx={{ bgcolor: "#f0fdf4", color: "#16a34a", fontWeight: 700, fontFamily: "Comfortaa" }} 
-            />
-          )}
         </Box>
       </Box>
 
-      <Divider sx={{ mb: 3 }} />
-
-      {/* Questions List */}
-      <Stack 
-        spacing={2} 
-        sx={{ 
-          maxHeight: "48vh", 
+      <Stack
+        spacing={2}
+        sx={{
+          maxHeight: "35vh", // Adjusted height due to the cause section
           overflowY: "auto",
           pr: 1,
           "&::-webkit-scrollbar": { width: "6px" },
@@ -102,7 +177,7 @@ const CurrentComplaint = ({ patientQus }) => {
         {activeQuestions.length > 0 ? (
           activeQuestions.map((item, index) => (
             <Box
-              key={item.question} // Use question text as key if no ID exists
+              key={item.question}
               sx={{
                 p: 2,
                 borderRadius: 3,
@@ -111,19 +186,15 @@ const CurrentComplaint = ({ patientQus }) => {
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
-                transition: "all 0.3s ease",
-                "&:hover": {
-                  bgcolor: "#fff",
-                  borderColor: "#2563eb",
-                  boxShadow: "0px 4px 12px rgba(37,99,235,0.08)"
-                }
+                transition: "0.2s ease-in-out",
+                "&:hover": { bgcolor: "#fff", borderColor: "#2563eb" },
               }}
             >
               <Box sx={{ display: "flex", gap: 2, alignItems: "flex-start" }}>
                 <Typography sx={{ color: "#9CA3AF", fontWeight: 700, fontFamily: "Philosopher", mt: 0.2 }}>
                   {index + 1}.
                 </Typography>
-                <Typography sx={{ fontFamily: "Philosopher", fontSize: 16, fontWeight: 500, color: "#374151" }}>
+                <Typography sx={{ fontFamily: "Philosopher", fontSize: 15, fontWeight: 500, color: "#374151" }}>
                   {item.question}
                 </Typography>
               </Box>
@@ -133,68 +204,41 @@ const CurrentComplaint = ({ patientQus }) => {
                   size="small"
                   startIcon={<HelpCircle size={14} />}
                   onClick={() => handleOpenReason(item)}
-                  sx={{
-                    textTransform: "none",
-                    fontFamily: "Comfortaa",
-                    fontWeight: 600,
-                    color: "#64748b",
-                    "&:hover": { color: "#2563eb", bgcolor: "#eff6ff" }
-                  }}
+                  sx={{ textTransform: "none", fontFamily: "Comfortaa", color: "#64748b" }}
                 >
                   Why?
                 </Button>
-                
-                <Tooltip title="Mark as Asked">
-                  <IconButton 
-                    onClick={() => handleMarkAsDone(item.question)}
-                    sx={{ 
-                      color: "#9CA3AF", 
-                      "&:hover": { color: "#16a34a", bgcolor: "#f0fdf4" } 
-                    }}
-                  >
-                    <CheckCircle size={20} />
+                <Tooltip title="Mark Asked">
+                  <IconButton onClick={() => handleMarkAsDone(item.question)} size="small">
+                    <CheckCircle size={18} color="#9CA3AF" />
                   </IconButton>
                 </Tooltip>
               </Box>
             </Box>
           ))
         ) : (
-          <Box sx={{ textAlign: 'center', py: 4 }}>
+          <Box sx={{ textAlign: "center", py: 2 }}>
             <Typography sx={{ fontFamily: "Philosopher", color: "#64748b" }}>
-              {patientQus?.questions_to_ask ? "All follow-up questions have been addressed." : "No follow-up questions required yet."}
+              All diagnostics complete.
             </Typography>
           </Box>
         )}
       </Stack>
 
-      {/* Reasoning Dialog remains similar but with safer chaining */}
-      <Dialog 
-        open={modalOpen} 
-        onClose={handleClose}
-        PaperProps={{ sx: { borderRadius: 4, p: 1, maxWidth: "450px" } }}
-      >
+      {/* Clinical Reasoning Dialog */}
+      <Dialog open={modalOpen} onClose={handleClose} PaperProps={{ sx: { borderRadius: 4, p: 1, maxWidth: "450px" } }}>
         <DialogTitle sx={{ display: "flex", alignItems: "center", gap: 1, fontFamily: "Comfortaa", fontWeight: 700 }}>
           <Info size={20} color="#2563eb" />
           Clinical Reasoning
         </DialogTitle>
         <DialogContent>
-          <Box sx={{ bgcolor: "#F0F7FF", p: 2, borderRadius: 2, mb: 2 }}>
-            <Typography sx={{ fontFamily: "Philosopher", fontSize: 15, fontStyle: "italic", color: "#374151" }}>
-              "{selectedQuestion?.question}"
-            </Typography>
-          </Box>
           <Typography sx={{ fontFamily: "Philosopher", color: "#4B5563", lineHeight: 1.6 }}>
-            {selectedQuestion?.reason || "Reasoning not provided for this question."}
+            {selectedQuestion?.reason}
           </Typography>
         </DialogContent>
         <DialogActions sx={{ p: 2 }}>
-          <Button 
-            fullWidth 
-            variant="contained" 
-            onClick={handleClose}
-            sx={{ borderRadius: 2, bgcolor: "#2563eb", fontFamily: "Comfortaa", textTransform: "none", py: 1 }}
-          >
-            Understood
+          <Button fullWidth variant="contained" onClick={handleClose} sx={{ borderRadius: 2, bgcolor: "#2563eb", fontFamily: "Comfortaa", textTransform: "none" }}>
+            Got it
           </Button>
         </DialogActions>
       </Dialog>
@@ -203,7 +247,7 @@ const CurrentComplaint = ({ patientQus }) => {
 };
 
 const Chip = ({ label, sx }) => (
-  <Box sx={{ ...sx, px: 1.5, py: 0.5, borderRadius: 5, fontSize: '0.75rem' }}>
+  <Box sx={{ ...sx, px: 1.5, py: 0.5, borderRadius: 5, fontSize: "0.75rem" }}>
     {label}
   </Box>
 );

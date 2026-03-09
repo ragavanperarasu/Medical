@@ -25,14 +25,15 @@ setPatientData(data);
   return (
     <Box sx={{ background: "#f5f7fb", minHeight: "100vh", py: 2}}>
       <Container maxWidth="xl">
+        <Box sx={{position:'sticky', top:15, zIndex:100, pb:2, bgcolor:'#f5f7fb'}}>
         <HeaderBar
         patientData={patientData}
         patientHelthData={patientHelthData}
   setHeaderData={setHeaderData}
   setHeaderData2={setHeaderData2}
 
-/>
-        <Grid container spacing={2} sx={{ mt: 2 }}>
+/></Box>
+        <Grid container spacing={2} sx={{ mt: 0 }}>
           <Grid size={{ xs: 12, md: 3 }}>
             <PreviousHealthData setPatientHelthData={setPatientHelthData} />
           </Grid>

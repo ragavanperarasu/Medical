@@ -102,7 +102,7 @@ const DataProgress = () => {
   };
 
   return (
-    <Card sx={{px:3,pb:3, borderRadius: 4, border: '1px solid #C0C0C0', boxShadow: 'none', bgcolor: 'white', minHeight: '75vh', overflowY:'auto', maxHeight:'50vh', pr: 1,
+    <Card sx={{px:3,pb:3, borderRadius: 4, border: '1px solid #C0C0C0', boxShadow: 'none', bgcolor: 'white', minHeight: '88vh', overflowY:'auto', maxHeight:'50vh', pr: 1,
           "&::-webkit-scrollbar": { width: "6px" },
           "&::-webkit-scrollbar-track": { background: "#f1f1f1", borderRadius: "10px", mt:10, mb:5 },
           "&::-webkit-scrollbar-thumb": { background: "#cbd5e1", borderRadius: "10px" },}}>

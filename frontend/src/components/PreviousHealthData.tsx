@@ -26,7 +26,7 @@ const PreviousHealthData = ({setPatientHelthData}) => {
     "Medications": ["Metformin 500mg", "Lisinopril 10mg"],
     "Surgical History": ["Appendectomy (2015)"]
   });
-  
+
   useEffect(()=>{
     setPatientHelthData(healthData)
   },[healthData])
@@ -75,8 +75,8 @@ const PreviousHealthData = ({setPatientHelthData}) => {
         borderRadius: 3,
         boxShadow: "none",
         border: "1px solid #C0C0C0",
-        minHeight: "80vh",
-        maxHeight: "80vh",
+        minHeight: "88vh",
+        maxHeight: "88vh",
         minWidth: 280,
         overflowY: "auto",
         pr: 1,

@@ -1,0 +1,65 @@
+PATIENT PROFILE:
+{
+  "Medical History": ["Diabetes", "Hypertension"],
+  "Allergies": ["Peanuts", "Dust"],
+  "Lifestyle": ["Non-smoker", "Occasional Alcohol"],
+  "Medications": ["Metformin 500mg", "Lisinopril 10mg"],
+  "Surgical History": ["Appendectomy (2015)"]
+}
+CONVERSATION:
+Patient: Doctor, for the past two days, I haven't been feeling well.
+Patient: My knee is hurting a lot.
+ORTHO AGENT OUTPUT:
+{"suspected_cause":[{"cause":"Osteoarthritis","probability":40},{"cause":"Gout","probability":30},{"cause":"Meniscal tear","probability":20},{"cause":"Rheumatoid arthritis","probability":10}],"questions_to_ask":[{"question":"Can you describe the type of pain in your knee (sharp, dull, throbbing)?","reason":"Understanding the pain type helps differentiate between inflammatory and mechanical causes."},{"question":"Have you experienced any swelling or redness in the knee?","reason":"Swelling and redness can indicate inflammation, which is important for diagnosing conditions like gout or arthritis."},{"question":"Did you have any recent injuries or trauma to the knee?","reason":"Identifying recent trauma can help diagnose a meniscal tear or other injury-related issues."},{"question":"Is the pain worse at any particular time of day or with certain activities?","reason":"Pain timing and triggers can help differentiate between osteoarthritis and other conditions."},{"question":"Have you noticed any changes in your ability to move or bear weight on the knee?","reason":"Functional limitations can indicate the severity and type of knee pathology."}]}
+
+
+{
+  "output_parsed": {
+    "patient_profile": {
+      "medical_history": [
+        "Diabetes",
+        "Hypertension"
+      ],
+      "allergies": [
+        "Peanuts",
+        "Dust"
+      ],
+      "medications": [
+        "Metformin 500mg",
+        "Lisinopril 10mg"
+      ],
+      "lifestyle": [
+        "Non-smoker",
+        "Occasional Alcohol"
+      ],
+      "surgical_history": [
+        "Appendectomy (2015)"
+      ]
+    },
+    "current_complaints": [
+      "Knee pain"
+    ],
+    "symptom_details": {
+      "location": "Knee",
+      "duration": "Two days",
+      "severity": "A lot",
+      "triggers": "",
+      "associated_symptoms": []
+    },
+    "questions_asked_by_doctor": [
+      "Can you describe the type of pain in your knee (sharp, dull, throbbing)?",
+      "Have you experienced any swelling or redness in the knee?",
+      "Did you have any recent injuries or trauma to the knee?",
+      "Is the pain worse at any particular time of day or with certain activities?",
+      "Have you noticed any changes in your ability to move or bear weight on the knee?"
+    ],
+    "patient_answers": [],
+    "suspected_conditions": [
+      "Osteoarthritis",
+      "Gout",
+      "Meniscal tear",
+      "Rheumatoid arthritis"
+    ],
+    "conversation_summary": "The patient complains of significant knee pain for the past two days. The Ortho Agent suspects conditions such as osteoarthritis, gout, meniscal tear, or rheumatoid arthritis. Questions were asked about the pain's characteristics, swelling, recent trauma, timing, and movement limitations to further assess the issue."
+  }
+}
