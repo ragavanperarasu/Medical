@@ -11,6 +11,38 @@ const TranscriptTab = ({ data }) => {
     },
     {
       sender: "Patient",
+      message: "I feel a bit better, but I still have a slight headache.I'll make a note of that. Have you been drinking enough water today?I'll make a note of that. Have you been drinking enough water today?",
+    },
+    {
+      sender: "Nurse",
+      message: "I'll make a note of that. Have you been drinking enough water today?I'll make a note of that. Have you been drinking enough water today?I'll make a note of that. Have you been drinking enough water today?I'll make a note of that. Have you been drinking enough water today?",
+    },
+    {
+      sender: "Patient",
+      message: "Yes, I've had I'll make a note of that. Have you been drinking enough water today?I'll make a note of that. Have you been drinking enough water today?I'll make a note of that. Have you been drinking enough water today?I'll make a note of that. Have you been drinking enough water today?I'll make a note of that. Have you been drinking enough water today?about three glasses so far.",
+    },
+    {
+      sender: "Nurse",
+      message: "Good morning! How are you feeling after your medication?",
+    },
+    {
+      sender: "Patient",
+      message: "I feel a bit better, but I still have a slight headache.",
+    },
+    {
+      sender: "Nurse",
+      message: "I'll make a note of that. Have you been drinking enough water today?",
+    },
+    {
+      sender: "Patient",
+      message: "Yes, I've had about three glasses so far.",
+    },
+    {
+      sender: "Nurse",
+      message: "Good morning! How are you feeling after your medication?",
+    },
+    {
+      sender: "Patient",
       message: "I feel a bit better, but I still have a slight headache.",
     },
     {
@@ -46,7 +78,7 @@ const TranscriptTab = ({ data }) => {
         </Typography>
       </Box>
 
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, px: 30 }}>
         {chatData.map((chat) => {
           const isNurse = chat.sender === "Nurse";
 
@@ -83,19 +115,20 @@ const TranscriptTab = ({ data }) => {
                 {/* Message Bubble */}
                 <Box
                   sx={{
-                    p: 2,
+                    px: 2,
+                    py: 1,
                     borderRadius: isNurse ? '16px 16px 16px 4px' : '16px 16px 4px 16px',
                     bgcolor: isNurse ? '#f0f4ff' : '#f5f7fb',
                     border: isNurse ? '1px solid #d1d9ff' : '1px solid #e0e0e0',
                   }}
                 >
-                  <Typography 
+                  {/* <Typography 
                     variant="caption" 
-                    sx={{ fontWeight: 'bold', color: isNurse ? '#1976d2' : '#555', display: 'block', mb: 0.5 }}
+                    sx={{ fontWeight: 'bold', color: isNurse ? '#1976d2' : '#555', display: 'block', fontSize: 16, fontFamily: 'Comfortaa' }}
                   >
                     {chat.sender}
-                  </Typography>
-                  <Typography variant="body2" sx={{ color: '#333', lineHeight: 1.5 }}>
+                  </Typography> */}
+                  <Typography variant="body2" sx={{ color: '#333', lineHeight: 1.5, fontSize: 18, fontFamily: 'Philosopher' }}>
                     {chat.message}
                   </Typography>
                 </Box>
