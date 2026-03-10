@@ -44,25 +44,12 @@ const ReviewPage = () => {
             sx={{ 
               mt: 2, 
               px: 3, 
-              pt: 2, 
               borderRadius: '12px', 
               border: '1px solid #C0C0C0', 
               boxShadow: 'none' 
             }}
           >
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Clipboard size={20} color="#1976d2" />
-              <Typography
-                variant="h6"
-                sx={{ 
-                  fontWeight: 'bold', 
-                  textTransform: 'none', 
-                  fontFamily: 'Comfortaa' 
-                }}
-              >
-                Review Patient Details
-              </Typography>
-            </Box>
+
 
             <Tabs 
               value={activeTab} 
@@ -87,12 +74,12 @@ const ReviewPage = () => {
                 label="Summary" 
               />
               <Tab 
-                icon={<HelpCircle size={18} style={{ marginBottom: 2 }} />} 
+                icon={<HelpCircle size={18} />} 
                 iconPosition="start" 
                 label="Questions" 
               />
               <Tab 
-                icon={<MessageSquare size={18} style={{ marginBottom: 2 }} />} 
+                icon={<MessageSquare size={18}  />} 
                 iconPosition="start" 
                 label="Transcript" 
               />

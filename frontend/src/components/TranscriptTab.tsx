@@ -71,14 +71,15 @@ const TranscriptTab = ({ data }) => {
         background: "#ffffff" 
       }}
     >
-      <Box sx={{ mb: 3, display: 'flex', alignItems: 'center', gap: 1 }}>
+      
+
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, px: 30 }}>
+        <Box sx={{ mb: 3, display: 'flex', alignItems: 'center', gap: 1 }}>
         <Activity size={20} color="#1976d2" />
         <Typography variant="h6" sx={{ fontWeight: 'bold', fontFamily: 'Comfortaa' }}>
           Consultation Transcript
         </Typography>
       </Box>
-
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, px: 30 }}>
         {chatData.map((chat) => {
           const isNurse = chat.sender === "Nurse";
 

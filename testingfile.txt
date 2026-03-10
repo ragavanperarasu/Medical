@@ -127,3 +127,236 @@ previous conversation
 }
 
 next conversation
+
+*****************************
+ORTHO AGENT CHECK
+
+PATIENT PROFILE:
+{
+    heartrate: "72",
+    bp: "120/80",
+    tempinfahrenheit: "98.6",
+    gender: "Male",
+    age: "28",
+  }
+{
+  "Medical History": ["Diabetes", "Hypertension"],
+  "Allergies": ["Peanuts", "Dust"],
+  "Lifestyle": ["Non-smoker", "Occasional Alcohol"],
+  "Medications": ["Metformin 500mg", "Lisinopril 10mg"],
+  "Surgical History": ["Appendectomy (2015)"]
+}
+CONVERSATION:
+
+SticNurse: Hello, what problem are you experiencing today?
+Patient: Hello, nurse. I have been having pain in my lower back for the past three days.
+
+Nurse: Can you describe the pain? Is it sharp or dull?
+Patient: It is mostly a dull pain, but sometimes it becomes sharp when I bend or lift something.
+
+Nurse: Does the pain spread to your legs or hips?
+Patient: Yes, sometimes the pain goes down to my right leg.
+
+Nurse: Did you have any recent injury or heavy physical activity?
+Patient: I lifted a heavy box at work two days ago, and the pain started after that.
+
+Nurse: Do you feel stiffness or difficulty moving?
+Patient: Yes, especially in the morning it feels very stiff and hard to move.ky note
+
+%%%%%%%%%%%%%%%%%%
+
+THAT OUTPUT
+
+{
+  "output_parsed": {
+    "suspected_cause": [
+      {
+        "cause": "Lumbar Strain",
+        "probability": 70
+      },
+      {
+        "cause": "Herniated Disc",
+        "probability": 60
+      },
+      {
+        "cause": "Sciatica",
+        "probability": 50
+      }
+    ],
+    "questions_to_ask": [
+      {
+        "question": "Have you experienced any numbness or tingling in your legs or feet?",
+        "reason": "This helps assess nerve involvement, which is crucial for diagnosing conditions like herniated disc or sciatica."
+      },
+      {
+        "question": "Does the pain improve with rest or worsen with specific activities?",
+        "reason": "Understanding aggravating and relieving factors can help differentiate between mechanical and nerve-related causes."
+      },
+      {
+        "question": "Have you had any previous episodes of back pain?",
+        "reason": "Previous episodes can indicate a chronic condition or predisposition to certain back issues."
+      }
+    ]
+  }
+}
+
++++++++++++++++++++
+SUMMARY AGENT OUTPUT ABOVE CONVERSATION
+
+{
+  "output_parsed": {
+    "patient_profile": {
+      "medical_history": [
+        "Diabetes",
+        "Hypertension"
+      ],
+      "allergies": [
+        "Peanuts",
+        "Dust"
+      ],
+      "medications": [
+        "Metformin 500mg",
+        "Lisinopril 10mg"
+      ],
+      "lifestyle": [
+        "Non-smoker",
+        "Occasional Alcohol"
+      ],
+      "surgical_history": [
+        "Appendectomy (2015)"
+      ]
+    },
+    "current_complaints": [
+      "Lower back pain"
+    ],
+    "symptom_details": {
+      "location": "Lower back",
+      "duration": "3 days",
+      "severity": "Dull pain with sharp episodes",
+      "triggers": "Lifting heavy objects",
+      "associated_symptoms": [
+        "Pain radiating to the right leg",
+        "Stiffness, especially in the morning"
+      ]
+    },
+    "questions_asked_by_doctor": [
+      "Can you describe the pain? Is it sharp or dull?",
+      "Does the pain spread to your legs or hips?",
+      "Did you have any recent injury or heavy physical activity?",
+      "Do you feel stiffness or difficulty moving?",
+      "Have you experienced any numbness or tingling in your legs or feet?",
+      "Does the pain improve with rest or worsen with specific activities?",
+      "Have you had any previous episodes of back pain?"
+    ],
+    "patient_answers": [
+      "It is mostly a dull pain, but sometimes it becomes sharp when I bend or lift something.",
+      "Yes, sometimes the pain goes down to my right leg.",
+      "I lifted a heavy box at work two days ago, and the pain started after that.",
+      "Yes, especially in the morning it feels very stiff and hard to move."
+    ],
+    "suspected_conditions": [
+      "Lumbar Strain",
+      "Herniated Disc",
+      "Sciatica"
+    ],
+    "conversation_summary": "The patient, a 28-year-old male with a history of diabetes and hypertension, presents with lower back pain for three days, starting after lifting a heavy box. The pain is mostly dull but can be sharp with movement and radiates to the right leg, accompanied by morning stiffness. Suspected conditions include lumbar strain, herniated disc, and sciatica."
+  }
+}
+
+
+=============
+{
+
+  "output_parsed": {
+    "suspected_cause": [
+      {
+        "cause": "Acute mechanical low back strain after heavy lifting; sudden acute low back pain with stiffness and pain worsened by bending/lifting fits a strain/sprain pattern. ([hopkinsmedicine.org](https://www.hopkinsmedicine.org/health/conditions-and-diseases/back-pain?utm_source=openai))",
+        "probability": 55
+      },
+      {
+        "cause": "Lumbar disc herniation with right-sided radiculopathy/sciatica; heavy lifting is a risk factor, and pain radiating down one leg raises concern for nerve-root irritation. ([hopkinsmedicine.org](https://www.hopkinsmedicine.org/health/conditions-and-diseases/lumbar-disc-disease-herniated-disc?utm_source=openai))",
+        "probability": 35
+      },
+      {
+        "cause": "Nonspecific acute low back pain; many short-duration low back pain episodes are mechanical and are assessed by onset, severity, radiation, and aggravating factors. ([hopkinsmedicine.org](https://www.hopkinsmedicine.org/health/conditions-and-diseases/back-pain/low-back-pain?utm_source=openai))",
+        "probability": 7
+      },
+      {
+        "cause": "Inflammatory back pain/spondyloarthritis is less likely, but morning stiffness keeps it on the differential. ([hopkinsmedicine.org](https://www.hopkinsmedicine.org/health/conditions-and-diseases/ankylosing-spondylitis?utm_source=openai))",
+        "probability": 3
+      }
+    ],
+    "questions_to_ask": [
+      {
+        "question": "Do you have any numbness, tingling, or weakness in the right leg or foot?",
+        "reason": "These symptoms would strongly support lumbar radiculopathy or disc herniation rather than a simple muscular strain. ([hopkinsmedicine.org](https://www.hopkinsmedicine.org/health/conditions-and-diseases/lumbar-disc-disease-herniated-disc?utm_source=openai))"
+      },
+      {
+        "question": "Any trouble controlling urine or stool, or any numbness in the groin/saddle area?",
+        "reason": "Bowel/bladder dysfunction or saddle numbness with back pain are urgent red flags for serious nerve compression. ([hopkinsmedicine.org](https://www.hopkinsmedicine.org/health/conditions-and-diseases/back-pain?utm_source=openai))"
+      },
+      {
+        "question": "Does the pain go below the knee or into the foot, and is it worse with coughing, sneezing, bending, or sitting?",
+        "reason": "Pain extending farther down the leg and worsening with these maneuvers makes nerve-root irritation from disc disease more likely. ([hopkinsmedicine.org](https://www.hopkinsmedicine.org/health/conditions-and-diseases/lumbar-disc-disease-herniated-disc?utm_source=openai))"
+      },
+      {
+        "question": "How severe is the pain from 0 to 10, and is it limiting walking, standing, work, or sleep?",
+        "reason": "Severity and functional limitation help separate a mild strain from more significant pathology and guide urgency. ([hopkinsmedicine.org](https://www.hopkinsmedicine.org/health/conditions-and-diseases/back-pain/low-back-pain?utm_source=openai))"
+      },
+      {
+        "question": "Have you had fever, unintentional weight loss, a history of cancer, or prior similar back episodes?",
+        "reason": "These answers help screen for important alternative causes and red flags if this is not just uncomplicated mechanical back pain. ([hopkinsmedicine.org](https://www.hopkinsmedicine.org/health/conditions-and-diseases/back-pain?utm_source=openai))"
+      }
+    ]
+  }
+}
+
+=============
+
+{
+  "output_text": "{\"suspected_cause\":[{\"cause\":\"Acute lumbar disk disease / small herniated disk with right-sided radicular pain is most likely, because the pain began after heavy lifting and now sometimes radiates down the right leg; Johns Hopkins notes heavy lifting/twisting can contribute to lumbar disk disease and sciatica typically causes low-back pain that travels down one leg. ([hopkinsmedicine.org](https://www.hopkinsmedicine.org/health/conditions-and-diseases/lumbar-disc-disease-herniated-disc?utm_source=openai))\",\"probability\":45},{\"cause\":\"Acute lumbar strain with muscle spasm is also very plausible, because sudden low-back pain after lifting with stiffness is a common pattern for lumbar strain. ([hopkinsmedicine.org](https://www.hopkinsmedicine.org/health/conditions-and-diseases/lumbar-strain-weight-lifters-back?utm_source=openai))\",\"probability\":40},{\"cause\":\"Nonspecific acute mechanical low-back pain remains possible, since acute back pain can be dull or sharp, worsen with movement, and often follows strain-related injury. ([hopkinsmedicine.org](https://www.hopkinsmedicine.org/health/conditions-and-diseases/back-pain?utm_source=openai))\",\"probability\":10},{\"cause\":\"More serious compressive neurologic pathology is less likely but must be screened for, because new bladder/bowel dysfunction, leg weakness, or progressive neurologic symptoms would need urgent attention. ([hopkinsmedicine.org](https://www.hopkinsmedicine.org/health/conditions-and-diseases/back-pain?utm_source=openai))\",\"probability\":5}],\"questions_to_ask\":[{\"question\":\"Do you have any numbness, tingling, or weakness in the right leg or foot, and is it hard to walk on your heel or toes?\",\"reason\":\"This is the highest-yield question to distinguish simple lumbar strain from nerve-root irritation/radiculopathy and to assess for neurologic deficit. ([hopkinsmedicine.org](https://www.hopkinsmedicine.org/health/conditions-and-diseases/lumbar-disc-disease-herniated-disc?utm_source=openai))\"},{\"question\":\"Have you had any trouble controlling your urine or bowels, or any numbness around the groin/saddle area?\",\"reason\":\"These are emergency red-flag symptoms for serious spinal nerve compression and must be checked immediately. ([hopkinsmedicine.org](https://www.hopkinsmedicine.org/health/conditions-and-diseases/back-pain?utm_source=openai))\"},{\"question\":\"How far does the pain travel—only to the thigh/hip, or below the knee into the calf or foot—and does coughing, sneezing, or straining make it worse?\",\"reason\":\"Pain extending below the knee and worsening with cough/strain supports lumbar disk-related radicular pain more than a simple muscular strain. ([hopkinsmedicine.org](https://www.hopkinsmedicine.org/health/conditions-and-diseases/lumbar-disc-disease-herniated-disc?utm_source=openai))\"},{\"question\":\"Can you stand, walk, bend, and sleep normally, or is the pain stopping you from normal daily activities or work?\",\"reason\":\"Functional limitation helps grade severity and decide whether this is uncomplicated mechanical pain versus pain needing more urgent evaluation. ([hopkinsmedicine.org](https://www.hopkinsmedicine.org/health/conditions-and-diseases/back-pain?utm_source=openai))\"},{\"question\":\"Any fever, chills, unexplained weight loss, recent fall, or history of cancer/infection, and have you had similar back episodes before?\",\"reason\":\"These questions screen for uncommon but important non-mechanical causes and clarify whether this is a recurrent mechanical back problem. ([hopkinsmedicine.org](https://www.hopkinsmedicine.org/health/conditions-and-diseases/back-pain?utm_source=openai))\"}],\"conversation_complete\":\"false\",\"medical_image_prompt\":false}",
+  "output_parsed": {
+    "suspected_cause": [
+      {
+        "cause": "Acute lumbar disk disease / small herniated disk with right-sided radicular pain is most likely, because the pain began after heavy lifting and now sometimes radiates down the right leg; Johns Hopkins notes heavy lifting/twisting can contribute to lumbar disk disease and sciatica typically causes low-back pain that travels down one leg. ([hopkinsmedicine.org](https://www.hopkinsmedicine.org/health/conditions-and-diseases/lumbar-disc-disease-herniated-disc?utm_source=openai))",
+        "probability": 45
+      },
+      {
+        "cause": "Acute lumbar strain with muscle spasm is also very plausible, because sudden low-back pain after lifting with stiffness is a common pattern for lumbar strain. ([hopkinsmedicine.org](https://www.hopkinsmedicine.org/health/conditions-and-diseases/lumbar-strain-weight-lifters-back?utm_source=openai))",
+        "probability": 40
+      },
+      {
+        "cause": "Nonspecific acute mechanical low-back pain remains possible, since acute back pain can be dull or sharp, worsen with movement, and often follows strain-related injury. ([hopkinsmedicine.org](https://www.hopkinsmedicine.org/health/conditions-and-diseases/back-pain?utm_source=openai))",
+        "probability": 10
+      },
+      {
+        "cause": "More serious compressive neurologic pathology is less likely but must be screened for, because new bladder/bowel dysfunction, leg weakness, or progressive neurologic symptoms would need urgent attention. ([hopkinsmedicine.org](https://www.hopkinsmedicine.org/health/conditions-and-diseases/back-pain?utm_source=openai))",
+        "probability": 5
+      }
+    ],
+    "questions_to_ask": [
+      {
+        "question": "Do you have any numbness, tingling, or weakness in the right leg or foot, and is it hard to walk on your heel or toes?",
+        "reason": "This is the highest-yield question to distinguish simple lumbar strain from nerve-root irritation/radiculopathy and to assess for neurologic deficit. ([hopkinsmedicine.org](https://www.hopkinsmedicine.org/health/conditions-and-diseases/lumbar-disc-disease-herniated-disc?utm_source=openai))"
+      },
+      {
+        "question": "Have you had any trouble controlling your urine or bowels, or any numbness around the groin/saddle area?",
+        "reason": "These are emergency red-flag symptoms for serious spinal nerve compression and must be checked immediately. ([hopkinsmedicine.org](https://www.hopkinsmedicine.org/health/conditions-and-diseases/back-pain?utm_source=openai))"
+      },
+      {
+        "question": "How far does the pain travel—only to the thigh/hip, or below the knee into the calf or foot—and does coughing, sneezing, or straining make it worse?",
+        "reason": "Pain extending below the knee and worsening with cough/strain supports lumbar disk-related radicular pain more than a simple muscular strain. ([hopkinsmedicine.org](https://www.hopkinsmedicine.org/health/conditions-and-diseases/lumbar-disc-disease-herniated-disc?utm_source=openai))"
+      },
+      {
+        "question": "Can you stand, walk, bend, and sleep normally, or is the pain stopping you from normal daily activities or work?",
+        "reason": "Functional limitation helps grade severity and decide whether this is uncomplicated mechanical pain versus pain needing more urgent evaluation. ([hopkinsmedicine.org](https://www.hopkinsmedicine.org/health/conditions-and-diseases/back-pain?utm_source=openai))"
+      },
+      {
+        "question": "Any fever, chills, unexplained weight loss, recent fall, or history of cancer/infection, and have you had similar back episodes before?",
+        "reason": "These questions screen for uncommon but important non-mechanical causes and clarify whether this is a recurrent mechanical back problem. ([hopkinsmedicine.org](https://www.hopkinsmedicine.org/health/conditions-and-diseases/back-pain?utm_source=openai))"
+      }
+    ],
+    "conversation_complete": "false",
+    "medical_image_prompt": false
+  }
+}

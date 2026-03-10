@@ -27,8 +27,7 @@ import {
   Edit2,
   Users,
   Calendar,
-  Shield,
-  Info,
+  Clipboard
 } from "react-feather";
 import Loading from "./Loading";
 import axios from "axios";
@@ -148,7 +147,22 @@ const ReviewHeaderBar = ({
               <Edit2 size={14} />
             </IconButton>
           </Stack>
+
+
         </Stack>
+                              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Clipboard size={20} color="#1976d2" />
+              <Typography
+                variant="h6"
+                sx={{ 
+                  fontWeight: 'bold', 
+                  textTransform: 'none', 
+                  fontFamily: 'Comfortaa' 
+                }}
+              >
+                Review Patient Details
+              </Typography>
+            </Box>
       </Stack>
 
 
