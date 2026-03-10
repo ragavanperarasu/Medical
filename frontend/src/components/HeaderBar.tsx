@@ -128,6 +128,7 @@ const silenceTimerRef = useRef(null);
 
 
         if(history !== ""){
+          //console.log("first if")
           const senddata = `
           OLD CONVERSATION:
           ${history}
@@ -145,7 +146,7 @@ const silenceTimerRef = useRef(null);
         else if (sendHealthData) {
           const pd = JSON.stringify(patientHelthData);
           const pd2 = JSON.stringify(vitals);
-
+          // console.log("second if")
           const fpd = `
           PATIENT PROFILE:
           ${pd2} 
@@ -163,6 +164,7 @@ const silenceTimerRef = useRef(null);
           setHistory(response.data.summary);
         }
         else {
+         // console.log("else block")
           const response1 = await axios.post(
             "http://127.0.0.1:5000/api/ortho",
             { message: response.data.text }

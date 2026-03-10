@@ -5,9 +5,12 @@ import {
 import { 
   Calendar, Hash, Activity, User, Clock, CheckCircle, AlertCircle 
 } from 'react-feather';
+import { useNavigate } from "react-router-dom";
 
 const PatientStatus = ({ patientData }) => {
+  const navigate = useNavigate();
   // Logic to determine status color and icon
+  console.log("PatientStatus patientData:", patientData);
   const getStatusConfig = (status) => {
     switch (status) {
       case 'In-Progress':
@@ -47,14 +50,17 @@ const PatientStatus = ({ patientData }) => {
               Real-time update for {patientData.regno}
             </Typography></Box>
           <Chip 
-            icon={statusStyle.icon}
-            label={patientData.status} 
+            icon={<CheckCircle size={16} />}
+            onClick={() => navigate("/review",{ state: patientData })}
+            label={"Patient Review"} 
             sx={{ 
-              bgcolor: statusStyle.bgcolor, 
-              color: statusStyle.color, 
+              bgcolor: "#29AB87", 
+              color: "#ffffff", 
               fontWeight: 700,
-              fontFamily: 'Philosopher',
+              fontFamily: 'Comfortaa',
+              fontSize: 14,
               px: 1,
+              borderRadius: 2,
               '& .MuiChip-icon': { color: 'inherit' }
             }} 
           />
