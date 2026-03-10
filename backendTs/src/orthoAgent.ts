@@ -23,7 +23,7 @@ const webSearchPreview = webSearchTool({
     type: "approximate"
   }
 })
-const OrthoAgentSchema = z.object({ suspected_cause: z.array(z.object({ cause: z.string(), probability: z.number() })), questions_to_ask: z.array(z.object({ question: z.string(), reason: z.string() })) });
+const OrthoAgentSchema = z.object({ suspected_cause: z.array(z.object({ cause: z.string(), probability: z.number() })), questions_to_ask: z.array(z.object({ question: z.string(), reason: z.string() })), conversation_complete: z.string() });
 const orthoAgent = new Agent({
   name: "Ortho Agent",
   instructions: `You are an experienced orthopaedic doctor. Your task is to guide, evaluate, and optimize the collection of patient health data. The goal is to diagnose the patient accurately with a minimal set of high-value questions.
@@ -95,16 +95,17 @@ Critical information is not missed.
 Questioning is minimized.
 Stop asking questions once the top 2 suspected causes are supported by patient data.
 
+
 `,
-  model: "gpt-4o",
+  model: "gpt-5.4",
   tools: [
     webSearchPreview
   ],
   outputType: OrthoAgentSchema,
   modelSettings: {
-    temperature: 0.22,
-    topP: 1,
-    maxTokens: 2048,
+    reasoning: {
+      effort: "medium"
+    },
     store: true
   }
 });
@@ -146,3 +147,4 @@ export const runWorkflowOrtho = async (workflow: WorkflowInput) => {
     return orthoAgentResult;
   });
 }
+
