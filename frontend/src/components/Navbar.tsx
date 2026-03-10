@@ -17,7 +17,7 @@ const Navbar = () => {
           disableGutters 
           sx={{ 
             justifyContent: 'space-between',
-            height: '80px' // Fixed height to accommodate the 72px logo cleanly
+            height: '80px' 
           }}
         >
           {/* Logo Section */}
