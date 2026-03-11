@@ -360,3 +360,32 @@ SUMMARY AGENT OUTPUT ABOVE CONVERSATION
     "medical_image_prompt": false
   }
 }
+
+=================
+{
+  "output_text": "{\"items\":[{\"sender\":\"Nurse\",\"message\":\"Good morning, how are you feeling after your medication?\",\"emotion\":\"neutral\"},{\"sender\":\"Patient\",\"message\":\"I feel better, but I still have a headache.\",\"emotion\":\"pain\"},{\"sender\":\"Nurse\",\"message\":\"Have you been drinking water today?\",\"emotion\":\"neutral\"},{\"sender\":\"Patient\",\"message\":\"Yes, a little.\",\"emotion\":\"neutral\"}]}",
+  "output_parsed": {
+    "items": [
+      {
+        "sender": "Nurse",
+        "message": "Good morning, how are you feeling after your medication?",
+        "emotion": "neutral"
+      },
+      {
+        "sender": "Patient",
+        "message": "I feel better, but I still have a headache.",
+        "emotion": "pain"
+      },
+      {
+        "sender": "Nurse",
+        "message": "Have you been drinking water today?",
+        "emotion": "neutral"
+      },
+      {
+        "sender": "Patient",
+        "message": "Yes, a little.",
+        "emotion": "neutral"
+      }
+    ]
+  }
+}
