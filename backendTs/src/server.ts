@@ -6,6 +6,7 @@ import { OpenAI, toFile } from "openai";
 import { runWorkflow } from "./workflow.js"; // MUST use .js extension here
 import { runWorkflowOrtho } from "./orthoAgent.js"; // MUST use .js extension here
 import { summaryForLLM } from "./summaryForLLM.js"; // MUST use .js extension here
+import { splitAgent } from "./splitAgent.js"; // MUST use .js extension here
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -52,49 +53,10 @@ app.post("/transcribe", upload.single("audio"), async (req, res) => {
 
     console.log("Transcription:", transcription.text);
     // 🌍 Step 2: Translate Tamil text → English
-    const translation = await openai.chat.completions.create({
-      model: "gpt-4o",
-messages: [
-  {
-    role: "system",
-    content: `
-You are analyzing a medical conversation between exactly two people.
-
-Step 1: Convert everything to English.
-Step 2: Identify the two speakers.
-Step 3: Label them as Patient and Doctor.
-
-VERY IMPORTANT FORMATTING RULES:
-
-- Each speaker MUST be on a separate line.
-- After every sentence, insert a newline.
-- Never put two speakers on the same line.
-- Do NOT return a single paragraph.
-- Do NOT explain anything.
-
-Correct Example Output:
-
-Patient: Hello Doctor.
-Doctor: Hello, how can I help you?
-Patient: I have a headache.
-
-Return output exactly like the example format.
-`
-  },
-  {
-    role: "user",
-    content: transcription.text
-  }
-],
-      temperature: 0
-    });
-
-    const englishText = translation.choices[0].message.content;
-console.log("Translation:", englishText);
+    const translation = await splitAgent({ input_as_text: transcription.text });
     res.json({
       success: true,
-      original: transcription.text,
-      text: englishText
+      translation: translation.output_parsed,
     });
 
   } catch (error:any) {

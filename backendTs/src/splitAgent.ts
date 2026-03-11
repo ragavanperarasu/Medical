@@ -92,7 +92,7 @@ type WorkflowInput = { input_as_text: string };
 
 
 // Main code entrypoint
-export const runWorkflow = async (workflow: WorkflowInput) => {
+export const splitAgent = async (workflow: WorkflowInput) => {
   return await withTrace("spilitter", async () => {
     const state = {
 
