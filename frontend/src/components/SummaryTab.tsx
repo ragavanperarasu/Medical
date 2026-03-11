@@ -73,7 +73,7 @@ const SummaryTab = () => {
   const [editModal, setEditModal] = useState({ open: false, sectionId: null, stmtId: null, value: "", isSummary: false });
 
   const cardStyle = { p: 3, borderRadius: "12px", border: "1px solid #e0e6ed", mb: 2, boxShadow: "none" };
-  const sectionTitleStyle = { fontWeight: "bold", color: "#4a5568", fontFamily: "Comfortaa", fontSize: "0.85rem" };
+  const sectionTitleStyle = { fontWeight: "bold", color: "#4a5568", fontFamily: "Comfortaa", fontSize: 16};
 
   const handleOpenEdit = (sectionId, stmtId, currentValue, isSummary = false) => {
     setEditModal({ open: true, sectionId, stmtId, value: currentValue, isSummary });
@@ -107,10 +107,16 @@ const SummaryTab = () => {
         <Typography variant="h6" sx={{ fontWeight: 800, fontFamily: "Comfortaa" }}>Patient Intake Summary</Typography>
       </Stack>
 
+      {/* Main Complaint & Summary */}
+      <Paper sx={cardStyle}>
+        <Typography sx={sectionTitleStyle}>Current Complaint</Typography>
+        <Typography variant="h6" sx={{ fontFamily:"Philosopher" }}>Knee Pain</Typography>
+      </Paper>
+
       {/* Static Summary Section */}
       <Paper sx={{ ...cardStyle, border: "1px solid #bee3f8", bgcolor: "#f0f9ff", position: 'relative' }}>
         <Typography sx={{ ...sectionTitleStyle, color: "#2b6cb0" }}>Clinical Summary</Typography>
-        <Typography variant="body2" sx={{ color: "#2d3748", mt: 1, lineHeight: 1.6, pr: 4 }}>
+        <Typography variant="body2" sx={{ color: "#2d3748", mt: 1, lineHeight: 1.6, pr: 4, fontFamily: "Philosopher", fontSize: 18 }}>
           {summaryText}
         </Typography>
         <IconButton size="small" sx={{ position: 'absolute', top: 12, right: 12 }} onClick={() => handleOpenEdit(null, null, summaryText, true)}>
@@ -124,7 +130,7 @@ const SummaryTab = () => {
           <Grid size={{ xs: 12, md: 4 }} key={section.id}>
             <Accordion defaultExpanded sx={{ boxShadow: 'none', border: '1px solid #e0e6ed', borderRadius: '12px !important', '&:before': { display: 'none' } }}>
               <AccordionSummary expandIcon={<ChevronDown size={20}/>}>
-                <Typography sx={{ ...sectionTitleStyle, textTransform: 'uppercase', letterSpacing: 0.5 }}>{section.name}</Typography>
+                <Typography sx={{ ...sectionTitleStyle, textTransform: 'None', letterSpacing: 0.5 }}>{section.name}</Typography>
               </AccordionSummary>
               <AccordionDetails sx={{ pt: 0 }}>
                 {section.statements.map((stmt) => (
@@ -133,11 +139,11 @@ const SummaryTab = () => {
                       <Stack spacing={0.5} sx={{ width: '90%' }}>
                         <Stack direction="row" spacing={1} alignItems="center">
                           <HelpCircle size={12} color="#94a3b8" />
-                          <Typography sx={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 600 }}>{stmt.question}</Typography>
+                          <Typography sx={{ fontSize: 14, color: '#64748b', fontFamily: "Philosopher" }}>{stmt.question}</Typography>
                         </Stack>
                         <Stack direction="row" spacing={1} alignItems="center">
                           {stmt.status ? <CheckCircle size={14} color="#10b981" /> : <AlertCircle size={14} color="#ef4444" />}
-                          <Typography sx={{ fontSize: '0.9rem', color: '#1e293b', fontWeight: 700 }}>{stmt.answer}</Typography>
+                          <Typography sx={{ fontSize: '0.9rem', color: '#1e293b', fontWeight: 700, fontFamily: "Philosopher" }}>{stmt.answer}</Typography>
                         </Stack>
                       </Stack>
                       <IconButton size="small" onClick={() => handleOpenEdit(section.id, stmt.id, stmt.answer)}>
