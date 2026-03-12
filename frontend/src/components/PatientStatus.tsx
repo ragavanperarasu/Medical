@@ -7,20 +7,8 @@ import {
 } from 'react-feather';
 import { useNavigate } from "react-router-dom";
 
-const PatientStatus = ({ patientData, nurseAndPatientTranscript }) => {
+const PatientStatus = ({ currentPatientData, nurseAndPatientTranscript }) => {
   const navigate = useNavigate();
-  const getStatusConfig = (status) => {
-    switch (status) {
-      case 'In-Progress':
-        return { color: '#007FFF', bgcolor: '#EDF5FF', icon: <Clock size={16} /> };
-      case 'Completed':
-        return { color: '#2E7D32', bgcolor: '#E8F5E9', icon: <CheckCircle size={16} /> };
-      default:
-        return { color: '#ED6C02', bgcolor: '#FFF4E5', icon: <AlertCircle size={16} /> };
-    }
-  };
-
-  const statusStyle = getStatusConfig(patientData.status);
 
   return (
    
@@ -45,11 +33,11 @@ const PatientStatus = ({ patientData, nurseAndPatientTranscript }) => {
                     Current Complaint 
                   </Typography>
                   <Typography variant="body2" color="text.secondary" sx={{ml:4, fontFamily:'Philosopher'}} >
-              Real-time update for {patientData.regno}
+              Real-time update for {currentPatientData.regno}
             </Typography></Box>
           <Chip 
             icon={<CheckCircle size={16} />}
-            onClick={() => navigate("/review",{ state: { patientData, nurseAndPatientTranscript } })}
+            onClick={() => navigate("/review",{ state: { currentPatientData, nurseAndPatientTranscript } })}
             label={"Patient Review"} 
             sx={{ 
               bgcolor: "#29AB87", 
@@ -78,7 +66,7 @@ const PatientStatus = ({ patientData, nurseAndPatientTranscript }) => {
                 </Typography>
               </Box>
               <Typography variant="body1" sx={{ fontWeight: 500, fontFamily: 'Philosopher' }}>
-                {patientData.dob}
+                {currentPatientData.dob}
               </Typography>
             </Stack>
           </Grid>
@@ -94,7 +82,7 @@ const PatientStatus = ({ patientData, nurseAndPatientTranscript }) => {
                 </Typography>
               </Box>
               <Typography variant="body1" sx={{ fontWeight: 500, ml: 3 , fontFamily: 'Philosopher'}}>
-                {patientData.doctor}
+                {currentPatientData.doctor}
               </Typography>
             </Stack>
           </Grid>
@@ -109,7 +97,7 @@ const PatientStatus = ({ patientData, nurseAndPatientTranscript }) => {
                 </Typography>
               </Box>
               <Typography variant="body1" sx={{ fontWeight: 500, ml: 3, color: '#D32F2F', fontFamily: 'Philosopher' }}>
-                {patientData.complaint}
+                {currentPatientData.complaint}
               </Typography>
             </Stack>
           </Grid>

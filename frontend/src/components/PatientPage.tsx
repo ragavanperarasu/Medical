@@ -118,7 +118,8 @@ setPatientData(data);
           </Grid>
 
           <Grid size={{ xs: 12, md: 6 }}>
-            <PatientStatus patientData={patientData} nurseAndPatientTranscript={nurseAndPatientTranscript} />
+            <PatientStatus currentPatientData={currentPatientData} nurseAndPatientTranscript={nurseAndPatientTranscript} />
+
             <CurrentComplaint patientQus={headerData2} />
           </Grid>
             <Grid size={{ xs: 12, md: 3 }}>
