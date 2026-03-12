@@ -314,7 +314,6 @@ SUMMARY AGENT OUTPUT ABOVE CONVERSATION
 =============
 
 {
-  "output_text": "{\"suspected_cause\":[{\"cause\":\"Acute lumbar disk disease / small herniated disk with right-sided radicular pain is most likely, because the pain began after heavy lifting and now sometimes radiates down the right leg; Johns Hopkins notes heavy lifting/twisting can contribute to lumbar disk disease and sciatica typically causes low-back pain that travels down one leg. ([hopkinsmedicine.org](https://www.hopkinsmedicine.org/health/conditions-and-diseases/lumbar-disc-disease-herniated-disc?utm_source=openai))\",\"probability\":45},{\"cause\":\"Acute lumbar strain with muscle spasm is also very plausible, because sudden low-back pain after lifting with stiffness is a common pattern for lumbar strain. ([hopkinsmedicine.org](https://www.hopkinsmedicine.org/health/conditions-and-diseases/lumbar-strain-weight-lifters-back?utm_source=openai))\",\"probability\":40},{\"cause\":\"Nonspecific acute mechanical low-back pain remains possible, since acute back pain can be dull or sharp, worsen with movement, and often follows strain-related injury. ([hopkinsmedicine.org](https://www.hopkinsmedicine.org/health/conditions-and-diseases/back-pain?utm_source=openai))\",\"probability\":10},{\"cause\":\"More serious compressive neurologic pathology is less likely but must be screened for, because new bladder/bowel dysfunction, leg weakness, or progressive neurologic symptoms would need urgent attention. ([hopkinsmedicine.org](https://www.hopkinsmedicine.org/health/conditions-and-diseases/back-pain?utm_source=openai))\",\"probability\":5}],\"questions_to_ask\":[{\"question\":\"Do you have any numbness, tingling, or weakness in the right leg or foot, and is it hard to walk on your heel or toes?\",\"reason\":\"This is the highest-yield question to distinguish simple lumbar strain from nerve-root irritation/radiculopathy and to assess for neurologic deficit. ([hopkinsmedicine.org](https://www.hopkinsmedicine.org/health/conditions-and-diseases/lumbar-disc-disease-herniated-disc?utm_source=openai))\"},{\"question\":\"Have you had any trouble controlling your urine or bowels, or any numbness around the groin/saddle area?\",\"reason\":\"These are emergency red-flag symptoms for serious spinal nerve compression and must be checked immediately. ([hopkinsmedicine.org](https://www.hopkinsmedicine.org/health/conditions-and-diseases/back-pain?utm_source=openai))\"},{\"question\":\"How far does the pain travel—only to the thigh/hip, or below the knee into the calf or foot—and does coughing, sneezing, or straining make it worse?\",\"reason\":\"Pain extending below the knee and worsening with cough/strain supports lumbar disk-related radicular pain more than a simple muscular strain. ([hopkinsmedicine.org](https://www.hopkinsmedicine.org/health/conditions-and-diseases/lumbar-disc-disease-herniated-disc?utm_source=openai))\"},{\"question\":\"Can you stand, walk, bend, and sleep normally, or is the pain stopping you from normal daily activities or work?\",\"reason\":\"Functional limitation helps grade severity and decide whether this is uncomplicated mechanical pain versus pain needing more urgent evaluation. ([hopkinsmedicine.org](https://www.hopkinsmedicine.org/health/conditions-and-diseases/back-pain?utm_source=openai))\"},{\"question\":\"Any fever, chills, unexplained weight loss, recent fall, or history of cancer/infection, and have you had similar back episodes before?\",\"reason\":\"These questions screen for uncommon but important non-mechanical causes and clarify whether this is a recurrent mechanical back problem. ([hopkinsmedicine.org](https://www.hopkinsmedicine.org/health/conditions-and-diseases/back-pain?utm_source=openai))\"}],\"conversation_complete\":\"false\",\"medical_image_prompt\":false}",
   "output_parsed": {
     "suspected_cause": [
       {
@@ -362,30 +361,3 @@ SUMMARY AGENT OUTPUT ABOVE CONVERSATION
 }
 
 =================
-{
-  "output_text": "{\"items\":[{\"sender\":\"Nurse\",\"message\":\"Good morning, how are you feeling after your medication?\",\"emotion\":\"neutral\"},{\"sender\":\"Patient\",\"message\":\"I feel better, but I still have a headache.\",\"emotion\":\"pain\"},{\"sender\":\"Nurse\",\"message\":\"Have you been drinking water today?\",\"emotion\":\"neutral\"},{\"sender\":\"Patient\",\"message\":\"Yes, a little.\",\"emotion\":\"neutral\"}]}",
-  "output_parsed": {
-    "items": [
-      {
-        "sender": "Nurse",
-        "message": "Good morning, how are you feeling after your medication?",
-        "emotion": "neutral"
-      },
-      {
-        "sender": "Patient",
-        "message": "I feel better, but I still have a headache.",
-        "emotion": "pain"
-      },
-      {
-        "sender": "Nurse",
-        "message": "Have you been drinking water today?",
-        "emotion": "neutral"
-      },
-      {
-        "sender": "Patient",
-        "message": "Yes, a little.",
-        "emotion": "neutral"
-      }
-    ]
-  }
-}
