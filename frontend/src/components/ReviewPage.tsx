@@ -22,6 +22,8 @@ const ReviewPage = () => {
     }
   }, [location.state]);
 
+  
+
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
   };
