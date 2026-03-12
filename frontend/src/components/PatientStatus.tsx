@@ -7,7 +7,7 @@ import {
 } from 'react-feather';
 import { useNavigate } from "react-router-dom";
 
-const PatientStatus = ({ patientData }) => {
+const PatientStatus = ({ patientData, nurseAndPatientTranscript }) => {
   const navigate = useNavigate();
   // Logic to determine status color and icon
   console.log("PatientStatus patientData:", patientData);
@@ -51,7 +51,7 @@ const PatientStatus = ({ patientData }) => {
             </Typography></Box>
           <Chip 
             icon={<CheckCircle size={16} />}
-            onClick={() => navigate("/review",{ state: patientData })}
+            onClick={() => navigate("/review",{ state: { patientData, nurseAndPatientTranscript } })}
             label={"Patient Review"} 
             sx={{ 
               bgcolor: "#29AB87", 

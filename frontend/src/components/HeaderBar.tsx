@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   Box,
   Card,
@@ -77,6 +77,8 @@ const silenceTimerRef = useRef(null);
     setVitals({ ...vitals, [e.target.name]: e.target.value });
   };
 
+
+
   // 🎤 RECORDING LOGIC
   const startRecording = async () => {
   setConfirmOpen(false);
@@ -123,9 +125,8 @@ const silenceTimerRef = useRef(null);
           "http://127.0.0.1:5000/transcribe",
           formData
         );
-
-        setNurseAndPatientTranscript((prev) => [...prev, response.data]);
-        console.log("Transcription and Analysis Result:", response.data);
+        console.log("Transcription and Analysis Response:", response.data.items);
+        setNurseAndPatientTranscript((prev) => [...prev, ...response.data.items]);
 
         // if(history !== ""){
         //   const senddata = `

@@ -55,8 +55,8 @@ app.post("/transcribe", upload.single("audio"), async (req, res) => {
     console.log("Transcription:", transcription.text);
     // 🌍 Step 2: Translate Tamil text → English
     const translation = await splitAgent({ input_as_text: transcription.text });
-    console.log("Translation and Analysis:", translation.output_parsed);
-    res.json(translation.output_parsed.items);
+
+    res.json(translation.output_parsed);
 
   } catch (error:any) {
     console.error("Error:", error);

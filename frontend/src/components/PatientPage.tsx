@@ -22,6 +22,21 @@ const data = location.state;
 setPatientData(data);
 }, []);
 
+ useEffect(() => {
+  const handleBeforeUnload = (event) => {
+    const message = "Your conversation may be lost. Are you sure?";
+    event.preventDefault();
+    event.returnValue = message;
+    return message;
+  };
+
+  window.addEventListener("beforeunload", handleBeforeUnload);
+
+  return () => {
+    window.removeEventListener("beforeunload", handleBeforeUnload);
+  };
+}, []);
+
   return (
     <Box sx={{ background: "#f5f7fb", minHeight: "100vh", py: 2}}>
       <Container maxWidth="xl">
@@ -39,7 +54,7 @@ setPatientData(data);
           </Grid>
 
           <Grid size={{ xs: 12, md: 6 }}>
-            <PatientStatus patientData={patientData} />
+            <PatientStatus patientData={patientData} nurseAndPatientTranscript={nurseAndPatientTranscript} />
             <CurrentComplaint patientQus={headerData2} />
           </Grid>
             <Grid size={{ xs: 12, md: 3 }}>

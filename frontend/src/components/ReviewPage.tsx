@@ -11,12 +11,14 @@ import TranscriptTab from "./TranscriptTab";
 
 const ReviewPage = () => {
   const [patientData, setPatientData] = useState({});
+  const [nurseAndPatientTranscript, setNurseAndPatientTranscript] = useState([]);
   const [activeTab, setActiveTab] = useState(0);
   const location = useLocation();
 
   useEffect(() => {
     if (location.state) {
-      setPatientData(location.state);
+      setPatientData(location.state.patientData);
+      setNurseAndPatientTranscript(location.state.nurseAndPatientTranscript);
     }
   }, [location.state]);
 
@@ -92,7 +94,7 @@ const ReviewPage = () => {
           <Grid size={12}>
             {activeTab === 0 && <SummaryTab data={patientData} />}
             {activeTab === 1 && <QuestionsTab data={patientData} />}
-            {activeTab === 2 && <TranscriptTab data={patientData} />}
+            {activeTab === 2 && <TranscriptTab nurseAndPatientTranscript={nurseAndPatientTranscript} />}
           </Grid>
         </Grid>
       </Container>

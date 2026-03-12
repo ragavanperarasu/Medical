@@ -2,7 +2,8 @@ import React from "react";
 import { Typography, Paper, Box, Avatar } from "@mui/material";
 import { User, Activity } from "react-feather";
 
-const TranscriptTab = ({ data }) => {
+const TranscriptTab = ({ nurseAndPatientTranscript }) => {
+  console.log("TranscriptTab nurseAndPatientTranscript:", nurseAndPatientTranscript);``
   // Static data representing the conversation
   const staticConversation = [
     {
@@ -57,7 +58,7 @@ const TranscriptTab = ({ data }) => {
 
   // If you later have dynamic data in data.transcript, 
   // you can replace staticConversation with that array.
-  const chatData = data?.transcriptArray || staticConversation;
+  const chatData = nurseAndPatientTranscript;
 
   return (
     <Paper 
