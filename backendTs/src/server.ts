@@ -37,6 +37,7 @@ app.get("/", (req, res) => {
 
 
 app.post("/transcribe", upload.single("audio"), async (req, res) => {
+  console.log("Received audio file:", req.file ? req.file.originalname : "No file");
   try {
     if (!req.file) {
       return res.status(400).json({ error: "No audio file uploaded" });
@@ -54,10 +55,8 @@ app.post("/transcribe", upload.single("audio"), async (req, res) => {
     console.log("Transcription:", transcription.text);
     // 🌍 Step 2: Translate Tamil text → English
     const translation = await splitAgent({ input_as_text: transcription.text });
-    res.json({
-      success: true,
-      translation: translation.output_parsed,
-    });
+    console.log("Translation and Analysis:", translation.output_parsed);
+    res.json(translation.output_parsed.items);
 
   } catch (error:any) {
     console.error("Error:", error);

@@ -11,7 +11,7 @@ import DataProgress from "./DataProgress";
 import HeaderBar from './HeaderBar'
 
 const PatientPage = () => {
-const [headerData, setHeaderData] = useState("Start you conversation by clicking the start recording button.");
+const [nurseAndPatientTranscript, setNurseAndPatientTranscript] = useState([]);
 const [headerData2, setHeaderData2] = useState([]);
 const [patientHelthData, setPatientHelthData] = useState();
 const [patientData, setPatientData] = useState({});
@@ -29,7 +29,7 @@ setPatientData(data);
         <HeaderBar
         patientData={patientData}
         patientHelthData={patientHelthData}
-  setHeaderData={setHeaderData}
+  setNurseAndPatientTranscript={setNurseAndPatientTranscript}
   setHeaderData2={setHeaderData2}
 
 /></Box>

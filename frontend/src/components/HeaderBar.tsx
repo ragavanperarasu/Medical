@@ -38,7 +38,7 @@ import { ToastContainer, toast } from 'react-toastify';
 
 
 const HeaderBar = ({
-  setHeaderData,
+  setNurseAndPatientTranscript,
   setHeaderData2,
   patientData,
   patientHelthData,
@@ -124,55 +124,53 @@ const silenceTimerRef = useRef(null);
           formData
         );
 
-        setHeaderData(response.data.text);
+        setNurseAndPatientTranscript((prev) => [...prev, response.data]);
+        console.log("Transcription and Analysis Result:", response.data);
 
+        // if(history !== ""){
+        //   const senddata = `
+        //   OLD CONVERSATION:
+        //   ${history}
 
-        if(history !== ""){
-          //console.log("first if")
-          const senddata = `
-          OLD CONVERSATION:
-          ${history}
-
-          NEXT CONVERSATION:
-          ${response.data.text}
-          `;
-          const response1 = await axios.post(
-            "http://127.0.0.1:5000/api/ortho",
-            { message: senddata }
-          );
-          setHeaderData2(response1.data.llm);
-          setHistory(response.data.summary);
-        }
-        else if (sendHealthData) {
-          const pd = JSON.stringify(patientHelthData);
-          const pd2 = JSON.stringify(vitals);
-          // console.log("second if")
-          const fpd = `
-          PATIENT PROFILE:
-          ${pd2} 
-          ${pd} 
+        //   NEXT CONVERSATION:
+        //   ${response.data.translation}
+        //   `;
+        //   const response1 = await axios.post(
+        //     "http://127.0.0.1:5000/api/ortho",
+        //     { message: senddata }
+        //   );
+        //   setHeaderData2(response1.data.llm);
+        //   setHistory(response.data.summary);
+        // }
+        // else if (sendHealthData) {
+        //   const pd = JSON.stringify(patientHelthData);
+        //   const pd2 = JSON.stringify(vitals);
+        //   const fpd = `
+        //   PATIENT PROFILE:
+        //   ${pd2} 
+        //   ${pd} 
           
-          CONVERSATION:
-          ${response.data.text}`;
+        //   CONVERSATION:
+        //   ${response.data.text}`;
 
-          const response1 = await axios.post(
-            "http://127.0.0.1:5000/api/ortho",
-            { message: fpd }
-          );
+        //   const response1 = await axios.post(
+        //     "http://127.0.0.1:5000/api/ortho",
+        //     { message: fpd }
+        //   );
 
-          setHeaderData2(response1.data.llm);
-          setHistory(response.data.summary);
-        }
-        else {
-         // console.log("else block")
-          const response1 = await axios.post(
-            "http://127.0.0.1:5000/api/ortho",
-            { message: response.data.text }
-          );
+        //   setHeaderData2(response1.data.llm);
+        //   setHistory(response.data.summary);
+        // }
+        // else {
+        //  // console.log("else block")
+        //   const response1 = await axios.post(
+        //     "http://127.0.0.1:5000/api/ortho",
+        //     { message: response.data.text }
+        //   );
 
-          setHeaderData2(response1.data.llm);
-          setHistory(response.data.summary);
-        }
+        //   setHeaderData2(response1.data.llm);
+        //   setHistory(response.data.summary);
+       // }
       } catch (err) {
         toast.error("Something Network Issue")
         //console.error("Transcription failed:", err);
