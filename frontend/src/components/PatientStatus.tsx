@@ -9,8 +9,6 @@ import { useNavigate } from "react-router-dom";
 
 const PatientStatus = ({ patientData, nurseAndPatientTranscript }) => {
   const navigate = useNavigate();
-  // Logic to determine status color and icon
-  console.log("PatientStatus patientData:", patientData);
   const getStatusConfig = (status) => {
     switch (status) {
       case 'In-Progress':

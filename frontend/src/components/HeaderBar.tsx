@@ -39,9 +39,10 @@ import { ToastContainer, toast } from 'react-toastify';
 
 const HeaderBar = ({
   setNurseAndPatientTranscript,
+  setPatientHelthData,
   setHeaderData2,
-  patientData,
   patientHelthData,
+  currentPatientData
 }) => {
   const [recording, setRecording] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
@@ -55,13 +56,8 @@ const silenceTimerRef = useRef(null);
   
 
   const [open, setOpen] = useState(false);
-  const [vitals, setVitals] = useState({
-    heartrate: "72",
-    bp: "120/80",
-    tempinfahrenheit: "98.6",
-    gender: "Male",
-    age: "28",
-  });
+  const [vitals, setVitals] = useState(currentPatientData.vitals);
+
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
   const streamRef = useRef(null);
@@ -243,7 +239,7 @@ const silenceTimerRef = useRef(null);
                 fontWeight="bold"
                 sx={{ fontFamily: "Comfortaa", fontSize: 16 }}
               >
-                {patientData.name}
+                {currentPatientData.name}
               </Typography>
             </Box>
           </Stack>
@@ -366,7 +362,7 @@ const silenceTimerRef = useRef(null);
         <DialogContent>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
             You are about to start an AI-assisted transcription for{" "}
-            <strong>{patientData.name}</strong>.
+            <strong>{currentPatientData.name}</strong>.
           </Typography>
 
           <Box
