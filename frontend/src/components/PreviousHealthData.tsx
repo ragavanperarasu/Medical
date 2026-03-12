@@ -17,18 +17,12 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Activity, Plus, Edit3, Trash2 } from "react-feather";
 
-const PreviousHealthData = ({setPatientHelthData}) => {
+const PreviousHealthData = ({setPatientHelthStatus, currentPatientData}) => {
   // 1. Manage health data in state
-  const [healthData, setHealthData] = useState({
-    "Medical History": ["Diabetes", "Hypertension"],
-    "Allergies": ["Peanuts", "Dust"],
-    "Lifestyle": ["Non-smoker", "Occasional Alcohol"],
-    "Medications": ["Metformin 500mg", "Lisinopril 10mg"],
-    "Surgical History": ["Appendectomy (2015)"]
-  });
+  const [healthData, setHealthData] = useState(currentPatientData.healthData);
 
   useEffect(()=>{
-    setPatientHelthData(healthData)
+    setPatientHelthStatus(healthData)
   },[healthData])
 
   // 2. State for Dialog

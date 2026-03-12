@@ -39,9 +39,10 @@ import { ToastContainer, toast } from 'react-toastify';
 
 const HeaderBar = ({
   setNurseAndPatientTranscript,
-  setPatientHelthData,
-  setHeaderData2,
-  patientHelthData,
+  setPatientHelthStatus,
+  patientHelthStatus,
+
+  setLLMQuestions,
   currentPatientData
 }) => {
   const [recording, setRecording] = useState(false);
@@ -165,7 +166,7 @@ const silenceTimerRef = useRef(null);
         //     { message: response.data.text }
         //   );
 
-        //   setHeaderData2(response1.data.llm);
+        //   setLLMQuestions(response1.data.llm);
         //   setHistory(response.data.summary);
        // }
       } catch (err) {

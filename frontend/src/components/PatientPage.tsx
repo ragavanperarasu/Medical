@@ -70,11 +70,17 @@ const dummyPatients = [
 
 const PatientPage = () => {
 const [nurseAndPatientTranscript, setNurseAndPatientTranscript] = useState([]);
+const [currentPatientData, setCurrentPatientData] = useState(dummyPatients[0]);
 
 const [headerData2, setHeaderData2] = useState([]);
+
+const [llmQuestions, setLLMQuestions] = useState([]);
+
 const [patientHelthData, setPatientHelthData] = useState(dummyPatients);
 
-const [currentPatientData, setCurrentPatientData] = useState(dummyPatients[0]);
+const [patientHelthStatus, setPatientHelthStatus] = useState(currentPatientData.healthData);
+
+
 
 const [patientData, setPatientData] = useState({});
 const location = useLocation();
@@ -105,16 +111,17 @@ setPatientData(data);
         <Box sx={{position:'sticky', top:15, zIndex:100, pb:2, bgcolor:'#f5f7fb'}}>
         <HeaderBar
         currentPatientData={currentPatientData}
+        setNurseAndPatientTranscript={setNurseAndPatientTranscript}
 
-        patientHelthData={patientHelthData}
-        setPatientHelthData={setPatientHelthData}
-  setNurseAndPatientTranscript={setNurseAndPatientTranscript}
-  setHeaderData2={setHeaderData2}
+        patientHelthStatus={patientHelthStatus}
+        setPatientHelthStatus={setPatientHelthStatus}
+  
+  setLLMQuestions={setLLMQuestions}
 
 /></Box>
         <Grid container spacing={2} sx={{ mt: 0 }}>
           <Grid size={{ xs: 12, md: 3 }}>
-            <PreviousHealthData setPatientHelthData={setPatientHelthData} />
+            <PreviousHealthData setPatientHelthStatus={setPatientHelthStatus} currentPatientData={currentPatientData} />
           </Grid>
 
           <Grid size={{ xs: 12, md: 6 }}>
