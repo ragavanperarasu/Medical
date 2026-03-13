@@ -125,11 +125,13 @@ const HeaderBar = ({
             const pd3 = JSON.stringify(response.data.items);
             const pd4 = JSON.stringify(history);
             const senddata = `
-          OLD CONVERSATION:
+          PREVIOUS NURSE AND PATIENT CONVERSATION SUMMARY:
           ${pd4}
 
-          NEXT CONVERSATION:
+          ABOUVE CONVERSATION CONTINUE THIS PATIENT AND NURSE CONVERSATION:
           ${pd3}
+
+          SO PREVIOUS CONVERSATION SOME QUESTIONS WERE ASKED BY LLM, SO CONTINUE TO ASK QUESTIONS BASED ON THE NEW CONVERSATION AND PREVIOUS SUMMARY.
           `;
 
             console.log("Data sent to Ortho Agent:", senddata);
