@@ -34,16 +34,13 @@ import Loading from "./Loading";
 import axios from "axios";
 import Lottie from "lottie-react";
 import loadingAnimation from "../assets/animation/loading.json";
-import { ToastContainer, toast } from 'react-toastify';
-
+import { ToastContainer, toast } from "react-toastify";
 
 const HeaderBar = ({
   setNurseAndPatientTranscript,
-  setPatientHelthStatus,
   patientHelthStatus,
-
   setLLMQuestions,
-  currentPatientData
+  currentPatientData,
 }) => {
   const [recording, setRecording] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
@@ -52,9 +49,8 @@ const HeaderBar = ({
   const [history, setHistory] = useState("");
 
   const audioContextRef = useRef(null);
-const analyserRef = useRef(null);
-const silenceTimerRef = useRef(null);
-  
+  const analyserRef = useRef(null);
+  const silenceTimerRef = useRef(null);
 
   const [open, setOpen] = useState(false);
   const [vitals, setVitals] = useState(currentPatientData.vitals);
@@ -74,131 +70,147 @@ const silenceTimerRef = useRef(null);
     setVitals({ ...vitals, [e.target.name]: e.target.value });
   };
 
-
-
   // 🎤 RECORDING LOGIC
   const startRecording = async () => {
-  setConfirmOpen(false);
+    setConfirmOpen(false);
 
-  try {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    streamRef.current = stream;
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      streamRef.current = stream;
 
-    const mediaRecorder = new MediaRecorder(stream);
-    mediaRecorderRef.current = mediaRecorder;
-    audioChunksRef.current = [];
+      const mediaRecorder = new MediaRecorder(stream);
+      mediaRecorderRef.current = mediaRecorder;
+      audioChunksRef.current = [];
 
-    // 🎧 Audio context for silence detection
-    const audioContext = new AudioContext();
-    audioContextRef.current = audioContext;
+      // 🎧 Audio context for silence detection
+      const audioContext = new AudioContext();
+      audioContextRef.current = audioContext;
 
-    const source = audioContext.createMediaStreamSource(stream);
-    const analyser = audioContext.createAnalyser();
-    analyser.fftSize = 512;
+      const source = audioContext.createMediaStreamSource(stream);
+      const analyser = audioContext.createAnalyser();
+      analyser.fftSize = 512;
 
-    source.connect(analyser);
-    analyserRef.current = analyser;
+      source.connect(analyser);
+      analyserRef.current = analyser;
 
-    mediaRecorder.ondataavailable = (event) => {
-      audioChunksRef.current.push(event.data);
-    };
+      mediaRecorder.ondataavailable = (event) => {
+        audioChunksRef.current.push(event.data);
+      };
 
-    mediaRecorder.onstop = async () => {
-      const audioBlob = new Blob(audioChunksRef.current, {
-        type: "audio/webm",
-      });
+      mediaRecorder.onstop = async () => {
+        const audioBlob = new Blob(audioChunksRef.current, {
+          type: "audio/webm",
+        });
 
-      const formData = new FormData();
-      formData.append("audio", audioBlob, "audio.webm");
+        const formData = new FormData();
+        formData.append("audio", audioBlob, "audio.webm");
 
-      if (sendHealthData) {
-        formData.append("vitals", JSON.stringify(vitals));
-      }
+        if (sendHealthData) {
+          formData.append("vitals", JSON.stringify(vitals));
+        }
 
-      try {
-        setLoad(true);
+        try {
+          setLoad(true);
 
-        const response = await axios.post(
-          "http://127.0.0.1:5000/transcribe",
-          formData
-        );
-        console.log("Transcription and Analysis Response:", response.data.items);
-        setNurseAndPatientTranscript((prev) => [...prev, ...response.data.items]);
+          const response = await axios.post(
+            "http://127.0.0.1:5000/transcribe",
+            formData,
+          );
+          setNurseAndPatientTranscript((prev) => [
+            ...prev,
+            ...response.data.items,
+          ]);
 
-        // if(history !== ""){
-        //   const senddata = `
-        //   OLD CONVERSATION:
-        //   ${history}
+          if (history !== "") {
+            const pd3 = JSON.stringify(response.data.items);
+            const pd4 = JSON.stringify(history);
+            const senddata = `
+          OLD CONVERSATION:
+          ${pd4}
 
-        //   NEXT CONVERSATION:
-        //   ${response.data.translation}
-        //   `;
-        //   const response1 = await axios.post(
-        //     "http://127.0.0.1:5000/api/ortho",
-        //     { message: senddata }
-        //   );
-        //   setHeaderData2(response1.data.llm);
-        //   setHistory(response.data.summary);
-        // }
-        // else if (sendHealthData) {
-        //   const pd = JSON.stringify(patientHelthData);
-        //   const pd2 = JSON.stringify(vitals);
-        //   const fpd = `
-        //   PATIENT PROFILE:
-        //   ${pd2} 
-        //   ${pd} 
+          NEXT CONVERSATION:
+          ${pd3}
+          `;
+
+            console.log("Data sent to Ortho Agent:", senddata);
+            const response1 = await axios.post(
+              "http://127.0.0.1:5000/api/ortho",
+              { message: senddata },
+            );
+            setLLMQuestions(response1.data.llm);
+            setHistory(response1.data.summary);
+          } else if (sendHealthData) {
+            const pd = JSON.stringify(patientHelthStatus);
+            const pd2 = JSON.stringify(vitals);
+            const pd3 = JSON.stringify(response.data.items);
+            const fpd = `
+          PATIENT PROFILE:
+          ${pd2} 
+          ${pd} 
           
-        //   CONVERSATION:
-        //   ${response.data.text}`;
+          CONVERSATION:
+          ${pd3}`;
 
-        //   const response1 = await axios.post(
-        //     "http://127.0.0.1:5000/api/ortho",
-        //     { message: fpd }
-        //   );
+            console.log("Data sent to Ortho Agent with Health Data:", fpd);
 
-        //   setHeaderData2(response1.data.llm);
-        //   setHistory(response.data.summary);
-        // }
-        // else {
-        //  // console.log("else block")
-        //   const response1 = await axios.post(
-        //     "http://127.0.0.1:5000/api/ortho",
-        //     { message: response.data.text }
-        //   );
+            const response1 = await axios.post(
+              "http://127.0.0.1:5000/api/ortho",
+              { message: fpd },
+            );
 
-        //   setLLMQuestions(response1.data.llm);
-        //   setHistory(response.data.summary);
-       // }
-      } catch (err) {
-        toast.error("Something Network Issue")
-        //console.error("Transcription failed:", err);
-      } finally {
-        setLoad(false);
-      }
-    };
+            setLLMQuestions(response1.data.llm);
+            setHistory(response1.data.summary);
+            console.log(
+              "Data sent to Ortho Agent with Health Data - Response:",
+              response1.data.summary,
+            );
+            console.log(
+              "Data sent to Ortho Agent with Health Data - LLM Questions:",
+              response1.data.llm,
+            );
+          } else {
+            const response1 = await axios.post(
+              "http://127.0.0.1:5000/api/ortho",
+              { message: response.data.items },
+            );
 
-    mediaRecorder.start();
-    setRecording(true);
-  } catch (err) {
-    alert("Please allow microphone access");
-  }
-};
+            setLLMQuestions(response1.data.llm);
+            setHistory(response1.data.summary);
+            console.log(
+              "Data sent to Ortho Agent without Health Data:",
+              response1.data.summary,
+            );
+          }
+        } catch (err) {
+          toast.error("Something Network Issue");
+          //console.error("Transcription failed:", err);
+        } finally {
+          setLoad(false);
+        }
+      };
 
- const stopRecording = () => {
-  if (mediaRecorderRef.current) mediaRecorderRef.current.stop();
+      mediaRecorder.start();
+      setRecording(true);
+    } catch (err) {
+      alert("Please allow microphone access");
+    }
+  };
 
-  if (streamRef.current) {
-    streamRef.current.getTracks().forEach((track) => track.stop());
-    streamRef.current = null;
-  }
+  const stopRecording = () => {
+    if (mediaRecorderRef.current) mediaRecorderRef.current.stop();
 
-  if (silenceTimerRef.current) {
-    clearTimeout(silenceTimerRef.current);
-    silenceTimerRef.current = null;
-  }
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach((track) => track.stop());
+      streamRef.current = null;
+    }
 
-  setRecording(false);
-};
+    if (silenceTimerRef.current) {
+      clearTimeout(silenceTimerRef.current);
+      silenceTimerRef.current = null;
+    }
+
+    setRecording(false);
+  };
 
   const handleMicClick = () => {
     if (recording) {
@@ -217,7 +229,7 @@ const silenceTimerRef = useRef(null);
         border: "1px solid #C0C0C0",
       }}
     >
-      <ToastContainer position="bottom-right"/>
+      <ToastContainer position="bottom-right" />
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         {/* LEFT SECTION */}
         <Stack direction="row" spacing={3} alignItems="center">
@@ -548,9 +560,7 @@ const VitalItem = ({ icon, label, value }) => (
         {value}
       </Typography>
     </Box>
-    
   </Stack>
-  
 );
 
 export default HeaderBar;

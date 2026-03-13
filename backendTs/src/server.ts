@@ -90,7 +90,7 @@ app.post("/api/ortho", async (req: Request, res: Response) => {
     // console.log("Ortho Agent Result:", result);
     // console.log("Summary for LLM Result:", result1);
 
-    res.json({llm:result.output_parsed, summary:result1});
+    res.json({llm:result.output_parsed, summary:result1.output_parsed});
 
   } catch (error: any) {
     res.status(500).json({ success: false, error: error.message });

@@ -1,14 +1,12 @@
-import {useState, useEffect} from 'react'
-import { Box, Container, Grid} from "@mui/material";
+import { useState, useEffect } from "react";
+import { Box, Container, Grid } from "@mui/material";
 import { useLocation } from "react-router-dom";
-
-
 
 import PreviousHealthData from "./PreviousHealthData";
 import CurrentComplaint from "./CurrentComplaint";
-import PatientStatus from './PatientStatus';
+import PatientStatus from "./PatientStatus";
 import DataProgress from "./DataProgress";
-import HeaderBar from './HeaderBar';
+import HeaderBar from "./HeaderBar";
 
 const dummyPatients = [
   {
@@ -25,7 +23,7 @@ const dummyPatients = [
       bp: "120/80",
       tempinfahrenheit: "98.6",
       gender: "Male",
-      age: "28"
+      age: "28",
     },
 
     healthData: {
@@ -34,8 +32,8 @@ const dummyPatients = [
       lifestyle: ["Non-smoker", "Occasional Alcohol"],
       medications: ["Metformin 500mg", "Lisinopril 10mg"],
       surgicalHistory: ["Appendectomy (2015)"],
-      profession: ["IT"]
-    }
+      profession: ["IT"],
+    },
   },
 
   {
@@ -52,7 +50,7 @@ const dummyPatients = [
       bp: "118/78",
       tempinfahrenheit: "98.4",
       gender: "Female",
-      age: "32"
+      age: "32",
     },
 
     healthData: {
@@ -61,81 +59,92 @@ const dummyPatients = [
       lifestyle: ["Non-smoker"],
       medications: ["Salbutamol"],
       surgicalHistory: [],
-      profession: ["Engineer"]
-    }
-  }
+      profession: ["Engineer"],
+    },
+  },
 ];
 
-
-
 const PatientPage = () => {
-const [nurseAndPatientTranscript, setNurseAndPatientTranscript] = useState([]);
-const [currentPatientData, setCurrentPatientData] = useState(dummyPatients[0]);
-
-const [headerData2, setHeaderData2] = useState([]);
-
-const [llmQuestions, setLLMQuestions] = useState([]);
-
-const [patientHelthData, setPatientHelthData] = useState(dummyPatients);
-
-const [patientHelthStatus, setPatientHelthStatus] = useState(currentPatientData.healthData);
+  const [nurseAndPatientTranscript, setNurseAndPatientTranscript] = useState(
+    [],
+  );
+  const [currentPatientData, setCurrentPatientData] = useState(
+    dummyPatients[0],
+  );
 
 
+  const [llmQuestions, setLLMQuestions] = useState([]);
 
-const [patientData, setPatientData] = useState({});
-const location = useLocation();
 
-useEffect(() => {
-const data = location.state;
-setPatientData(data);
-}, []);
+  const [patientHelthStatus, setPatientHelthStatus] = useState(
+    currentPatientData.healthData,
+  );
 
- useEffect(() => {
-  const handleBeforeUnload = (event) => {
-    const message = "Your conversation may be lost. Are you sure?";
-    event.preventDefault();
-    event.returnValue = message;
-    return message;
-  };
+  const [patientData, setPatientData] = useState({});
+  const location = useLocation();
 
-  window.addEventListener("beforeunload", handleBeforeUnload);
+  useEffect(() => {
+    const data = location.state;
+    setPatientData(data);
+  }, []);
 
-  return () => {
-    window.removeEventListener("beforeunload", handleBeforeUnload);
-  };
-}, []);
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      const message = "Your conversation may be lost. Are you sure?";
+      event.preventDefault();
+      event.returnValue = message;
+      return message;
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
 
   return (
-    <Box sx={{ background: "#f5f7fb", minHeight: "100vh", py: 2}}>
+    <Box sx={{ background: "#f5f7fb", minHeight: "100vh", py: 2 }}>
       <Container maxWidth="xl">
-        <Box sx={{position:'sticky', top:15, zIndex:100, pb:2, bgcolor:'#f5f7fb'}}>
-        <HeaderBar
-        currentPatientData={currentPatientData}
-        setNurseAndPatientTranscript={setNurseAndPatientTranscript}
-
-        patientHelthStatus={patientHelthStatus}
-        setPatientHelthStatus={setPatientHelthStatus}
-  
-  setLLMQuestions={setLLMQuestions}
-
-/></Box>
+        <Box
+          sx={{
+            position: "sticky",
+            top: 15,
+            zIndex: 100,
+            pb: 2,
+            bgcolor: "#f5f7fb",
+          }}
+        >
+          <HeaderBar
+            currentPatientData={currentPatientData}
+            setNurseAndPatientTranscript={setNurseAndPatientTranscript}
+            patientHelthStatus={patientHelthStatus}
+            setLLMQuestions={setLLMQuestions}
+          />
+        </Box>
         <Grid container spacing={2} sx={{ mt: 0 }}>
           <Grid size={{ xs: 12, md: 3 }}>
-            <PreviousHealthData setPatientHelthStatus={setPatientHelthStatus} currentPatientData={currentPatientData} />
+            <PreviousHealthData
+              setPatientHelthStatus={setPatientHelthStatus}
+              currentPatientData={currentPatientData}
+            />
           </Grid>
 
           <Grid size={{ xs: 12, md: 6 }}>
-            <PatientStatus currentPatientData={currentPatientData} nurseAndPatientTranscript={nurseAndPatientTranscript} />
+            <PatientStatus
+              currentPatientData={currentPatientData}
+              nurseAndPatientTranscript={nurseAndPatientTranscript}
+            />
 
-            <CurrentComplaint patientQus={headerData2} />
+            <CurrentComplaint patientQus={llmQuestions} />
           </Grid>
-            <Grid size={{ xs: 12, md: 3 }}>
-                <DataProgress />
-                </Grid>
+          <Grid size={{ xs: 12, md: 3 }}>
+            <DataProgress />
+          </Grid>
         </Grid>
       </Container>
     </Box>
   );
-}
+};
 
-export default PatientPage
+export default PatientPage;
