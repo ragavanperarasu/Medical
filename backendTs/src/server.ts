@@ -85,12 +85,12 @@ app.post("/api/ortho", async (req: Request, res: Response) => {
     ORTHO AGENT OUTPUT:
     ${result.output_text}
     `
-    const result1 = await summaryForLLM({ input_as_text: his });
+    //const result1 = await summaryForLLM({ input_as_text: his });
 
     // console.log("Ortho Agent Result:", result);
     // console.log("Summary for LLM Result:", result1);
 
-    res.json({llm:result.output_parsed, summary:result1.output_parsed});
+    res.json({llm:result.output_parsed, summary:""});
 
   } catch (error: any) {
     res.status(500).json({ success: false, error: error.message });

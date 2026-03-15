@@ -10,14 +10,14 @@ import QuestionsTab from "./QuestionsTab";
 import TranscriptTab from "./TranscriptTab";
 
 const ReviewPage = () => {
-  const [patientData, setPatientData] = useState({});
+  const [patientData, setPatientData] = useState([]);
   const [nurseAndPatientTranscript, setNurseAndPatientTranscript] = useState([]);
   const [activeTab, setActiveTab] = useState(0);
   const location = useLocation();
 
   useEffect(() => {
     if (location.state) {
-      setPatientData(location.state.patientData);
+      setPatientData(location.state.currentPatientData);
       setNurseAndPatientTranscript(location.state.nurseAndPatientTranscript);
     }
   }, [location.state]);

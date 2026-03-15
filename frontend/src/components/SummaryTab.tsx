@@ -67,7 +67,7 @@ const INITIAL_SECTIONS = [
   }
 ];
 
-const SummaryTab = () => {
+const SummaryTab = (data) => {
   const [sections, setSections] = useState(INITIAL_SECTIONS);
   const [summaryText, setSummaryText] = useState("Patient presents with right knee pain localized to the medial aspect, onset 3 weeks ago. Pain severity rated 7/10.");
   const [editModal, setEditModal] = useState({ open: false, sectionId: null, stmtId: null, value: "", isSummary: false });
